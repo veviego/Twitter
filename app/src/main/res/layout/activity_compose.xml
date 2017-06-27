@@ -25,4 +25,13 @@
         android:layout_below="@+id/etMessageBox"
         android:onClick="onSubmit"
         android:text="Tweet" />
+
+    <Button
+        android:id="@+id/btCancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/etMessageBox"
+        android:onClick="onCancel"
+        android:text="Cancel" />
 </RelativeLayout>
