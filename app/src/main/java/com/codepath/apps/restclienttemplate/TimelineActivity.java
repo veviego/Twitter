@@ -138,7 +138,7 @@ public class TimelineActivity extends AppCompatActivity {
             String tweetBody = data.getExtras().getString("tweetBody");
 
             // Add my latest tweet to my feed
-            Tweet recent = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra("justTweeted"));
+            Tweet recent = (Tweet) Parcels.unwrap(data.getParcelableExtra("justTweeted"));
 
             // Notify the adapter that a new tweet has been inserted and scroll to top
             tweets.add(0, recent);
