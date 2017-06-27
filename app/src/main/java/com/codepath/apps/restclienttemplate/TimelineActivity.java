@@ -26,7 +26,7 @@ public class TimelineActivity extends AppCompatActivity {
     // Constants
     private final int REQUEST_CODE = 20;
 
-    TwitterClient client = TwitterApplication.getRestClient();
+    TwitterClient client;
     TweetAdapter tweetAdapter;
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
@@ -44,7 +44,7 @@ public class TimelineActivity extends AppCompatActivity {
         // Make sure the toolbar exists in the activity and is not null
         setSupportActionBar(toolbar);
 
-//        client = TwitterApplication.getRestClient();
+        client = TwitterApplication.getRestClient();
 
         // find the RecyclerView
         rvTweets = (RecyclerView) findViewById(R.id.rvTweet);
