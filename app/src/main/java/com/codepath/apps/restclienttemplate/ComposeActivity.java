@@ -7,9 +7,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -32,9 +35,23 @@ public class ComposeActivity extends AppCompatActivity {
         client.sendTweet(tweetBody, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                // handle JSON Object Here
-                // Use the Parecer thing to send it back to the other activity and assemble as a tweet
-                Log.d("Compose Message", String.format("Tweet tweeted: %s", tweetBody));
+                try {
+
+                    Tweet posted = Tweet.fromJSON(response);
+
+                    // Create a new intent to place the message data in
+                    Intent data = new Intent();
+
+                    // Pass back the relevant data
+                    data.putExtra("justTweeted", Parcels.wrap(posted));
+
+                    // Activity finished ok, return the data
+                    setResult(RESULT_OK, data); // set result code and bundle data for response
+                    finish(); // closes the activity, pass data to parent
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -42,17 +59,5 @@ public class ComposeActivity extends AppCompatActivity {
                 Log.d("Compose Message", errorResponse.toString());
             }
         });
-
-
-
-        // Create a new intent to place the message data in
-        Intent data = new Intent();
-
-        // Pass back the relevant data
-        data.putExtra("tweetBody", message.getText().toString());
-
-        // Activity finished ok, return the data
-        setResult(RESULT_OK, data); // set result code and bundle data for response
-        finish(); // closes the activity, pass data to parent
     }
 }

@@ -16,6 +16,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -136,8 +137,13 @@ public class TimelineActivity extends AppCompatActivity {
             // Extract name value from result extras
             String tweetBody = data.getExtras().getString("tweetBody");
 
-            // Call the send tweet method using the client
+            // Add my latest tweet to my feed
+            Tweet recent = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra("justTweeted"));
 
+            // Notify the adapter that a new tweet has been inserted and scroll to top
+            tweets.add(0, recent);
+            tweetAdapter.notifyItemInserted(0);
+            rvTweets.scrollToPosition(0);
         }
     }
 }
