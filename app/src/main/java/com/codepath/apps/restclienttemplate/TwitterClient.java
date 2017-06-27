@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.codepath.oauth.OAuthBaseClient;
 import com.github.scribejava.apis.TwitterApi;
@@ -56,7 +57,12 @@ public class TwitterClient extends OAuthBaseClient {
 		// Can specify query string params directly or through RequestParams.
 		RequestParams params = new RequestParams();
 		params.put("status", message);
-		client.post(apiUrl, params, handler);
+		Log.d("Send Tweet", message);
+		try {
+			client.post(apiUrl, params, handler);
+		} catch (Exception e) {
+			Log.d("Send Tweet", e.toString());
+		}
 	}
 
 

@@ -27,19 +27,18 @@ public class ComposeActivity extends AppCompatActivity {
 
     public void onSubmit(View view) {
         EditText message = (EditText) findViewById(R.id.etMessageBox);
-        String tweetBody = message.getText().toString();
+        final String tweetBody = message.getText().toString();
 
         client.sendTweet(tweetBody, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 // handle JSON Object Here
                 // Use the Parecer thing to send it back to the other activity and assemble as a tweet
-
+                Log.d("Compose Message", String.format("Tweet tweeted: %s", tweetBody));
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
                 Log.d("Compose Message", errorResponse.toString());
             }
         });
