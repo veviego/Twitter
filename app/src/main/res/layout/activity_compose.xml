@@ -8,12 +8,21 @@
     android:visibility="visible"
     tools:context="com.codepath.apps.restclienttemplate.ComposeActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleTextColor="@android:color/white"
+        android:background="@color/colorPrimary">
+    </android.support.v7.widget.Toolbar>
+
     <EditText
         android:id="@+id/etMessageBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/toolbar"
         android:ems="10"
         android:hint="Compose Message Here"
         android:inputType="textMultiLine"

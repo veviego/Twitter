@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -33,8 +35,7 @@ public class TimelineActivity extends AppCompatActivity {
     private ArrayList<Tweet> tweets;
     private RecyclerView rvTweets;
     private SwipeRefreshLayout swipeContainer;
-
-
+    MenuItem miActionProgressItem;
 
 
     @Override
@@ -64,6 +65,7 @@ public class TimelineActivity extends AppCompatActivity {
         rvTweets.setAdapter(tweetAdapter);
 
         populateTimeline();
+
 
         // Lookup the swipe container view
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
@@ -181,13 +183,37 @@ public class TimelineActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Store instance of the menu item containing progress
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        // Extract the action-view from the menu item
+        ProgressBar v =  (ProgressBar) MenuItemCompat.getActionView(miActionProgressItem);
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    public void showProgressBar() {
+        // Show progress item
+        miActionProgressItem.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        miActionProgressItem.setVisible(false);
+    }
+
     // Establish event handler for compose icon
     public void onComposeAction (MenuItem mi) {
+        showProgressBar();
+
         // Create intent
         Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
 
         // Launch compose activity and expect a result
         startActivityForResult(i, REQUEST_CODE);
+
+        hideProgressBar();
     }
 
     // Handler for return of data

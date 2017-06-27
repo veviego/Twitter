@@ -2,12 +2,17 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -24,6 +29,8 @@ public class ComposeActivity extends AppCompatActivity {
     TwitterClient client;
     EditText message;
     TextView charCount;
+    MenuItem miActionProgressItem;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +38,14 @@ public class ComposeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_compose);
 
         client = TwitterApplication.getRestClient();
+
+        // Find the toolbar view inside the activity layout
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        // Sets the Toolbar to act as the ActionBar for this Activity window.
+        // Make sure the toolbar exists in the activity and is not null
+        setSupportActionBar(toolbar);
+
+        miActionProgressItem = (MenuItem) findViewById(R.id.miActionProgress);
 
         // Add a listener to the pending tweet to get a character count
         message = (EditText) findViewById(R.id.etMessageBox);
@@ -57,6 +72,7 @@ public class ComposeActivity extends AppCompatActivity {
 
     public void onSubmit(View view) {
         final String tweetBody = message.getText().toString();
+        showProgressBar();
 
         client.sendTweet(tweetBody, new JsonHttpResponseHandler() {
             @Override
@@ -73,6 +89,7 @@ public class ComposeActivity extends AppCompatActivity {
 
                     // Activity finished ok, return the data
                     setResult(RESULT_OK, data); // set result code and bundle data for response
+                    hideProgressBar();
                     finish(); // closes the activity, pass data to parent
 
                 } catch (JSONException e) {
@@ -86,6 +103,36 @@ public class ComposeActivity extends AppCompatActivity {
             }
         });
     }
+
+    // Menu icons are inflated just as they were with actionbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_compose, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        // Store instance of the menu item containing progress
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        // Extract the action-view from the menu item
+        ProgressBar v =  (ProgressBar) MenuItemCompat.getActionView(miActionProgressItem);
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    public void showProgressBar() {
+        // Show progress item
+        miActionProgressItem.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        miActionProgressItem.setVisible(false);
+    }
+
 
     public void onCancel(View view) {
         finish();
