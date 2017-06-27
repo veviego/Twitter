@@ -2,8 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tvC"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="visible"
     tools:context="com.codepath.apps.restclienttemplate.ComposeActivity">
 
     <EditText
@@ -15,6 +17,7 @@
         android:ems="10"
         android:hint="Compose Message Here"
         android:inputType="textPersonName"
+        android:maxLength="140"
         android:maxLines="10" />
 
     <Button
@@ -34,4 +37,16 @@
         android:layout_below="@+id/etMessageBox"
         android:onClick="onCancel"
         android:text="Cancel" />
+
+    <TextView
+        android:id="@+id/tvCharCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="140 / 140"
+        android:layout_alignBaseline="@+id/btTweetButton"
+        android:layout_alignBottom="@+id/btTweetButton"
+        android:layout_toStartOf="@+id/btTweetButton"
+        android:paddingRight="8dp"/>
+
+
 </RelativeLayout>
