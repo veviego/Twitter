@@ -43,12 +43,14 @@ public class ComposeActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                charCount.setText((140 - count) + " / 140");
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                int available = 140 - message.getText().toString().length();
+                String num = available + " / 140";
+                charCount.setText(num);
             }
         });
     }
