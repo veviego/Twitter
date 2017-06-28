@@ -31,11 +31,16 @@ public class ComposeActivity extends AppCompatActivity {
     TextView charCount;
     MenuItem miActionProgressItem;
 
+    int request_code;
+    Tweet replyTo;
+    long statusID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose);
+
+        request_code = (int) getIntent().getIntExtra("request_code", 0);
 
         client = TwitterApplication.getRestClient();
 
@@ -49,6 +54,15 @@ public class ComposeActivity extends AppCompatActivity {
 
         // Add a listener to the pending tweet to get a character count
         message = (EditText) findViewById(R.id.etMessageBox);
+        if (Integer.toString(request_code).equals(getResources().getString(R.string.reply_request))) {
+            replyTo = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra("currentTweet"));
+            String userName = "@" + replyTo.user.screenName;
+            message.setText(userName);
+
+            // Set userID for later
+            statusID = replyTo.uid;
+        }
+
         charCount = (TextView) findViewById(R.id.tvCharCount);
         message.addTextChangedListener(new TextWatcher() {
             @Override
@@ -70,38 +84,74 @@ public class ComposeActivity extends AppCompatActivity {
         });
     }
 
+
+
     public void onSubmit(View view) {
         final String tweetBody = message.getText().toString();
         showProgressBar();
 
-        client.sendTweet(tweetBody, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
+        // Reply to a tweet
+        if (Integer.toString(request_code).equals(getResources().getString(R.string.reply_request))) {
+            client.sendTweet(tweetBody, getResources().getString(R.string.reply_param_key), statusID, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
 
-                    Tweet posted = Tweet.fromJSON(response);
+                        Tweet posted = Tweet.fromJSON(response);
 
-                    // Create a new intent to place the message data in
-                    Intent data = new Intent();
+                        // Create a new intent to place the message data in
+                        Intent data = new Intent();
 
-                    // Pass back the relevant data
-                    data.putExtra("justTweeted", Parcels.wrap(posted));
+                        // Pass back the relevant data
+                        data.putExtra("justTweeted", Parcels.wrap(posted));
 
-                    // Activity finished ok, return the data
-                    setResult(RESULT_OK, data); // set result code and bundle data for response
-                    hideProgressBar();
-                    finish(); // closes the activity, pass data to parent
+                        // Activity finished ok, return the data
+                        setResult(RESULT_OK, data); // set result code and bundle data for response
+                        hideProgressBar();
+                        finish(); // closes the activity, pass data to parent
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("Compose Message", errorResponse.toString());
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Log.d("Compose Message", errorResponse.toString());
+                }
+            });
+        } else
+        {
+            // Post a new tweet
+            client.sendTweet(tweetBody, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
+
+                        Tweet posted = Tweet.fromJSON(response);
+
+                        // Create a new intent to place the message data in
+                        Intent data = new Intent();
+
+                        // Pass back the relevant data
+                        data.putExtra("justTweeted", Parcels.wrap(posted));
+
+                        // Activity finished ok, return the data
+                        setResult(RESULT_OK, data); // set result code and bundle data for response
+                        hideProgressBar();
+                        finish(); // closes the activity, pass data to parent
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Log.d("Compose Message", errorResponse.toString());
+                }
+            });
+        }
     }
 
     // Menu icons are inflated just as they were with actionbar

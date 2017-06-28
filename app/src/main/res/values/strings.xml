@@ -5,5 +5,7 @@
     <string name="login_label">Log in</string>
     <string name="intent_scheme">VVoauth</string>
     <string name="intent_host">VVcprest</string>
+    <string name="reply_request">40</string>
+    <string name="reply_param_key">in_reply_to_status_id</string>
 
 </resources>

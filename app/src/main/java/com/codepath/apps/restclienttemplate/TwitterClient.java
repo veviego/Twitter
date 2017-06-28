@@ -65,6 +65,22 @@ public class TwitterClient extends OAuthBaseClient {
 		}
 	}
 
+	// use this for extra params (replying to a tweet)
+	public void sendTweet(String message, String paramKey, long paramMessage, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/update.json");
+		// Can specify query string params directly or through RequestParams.
+		RequestParams params = new RequestParams();
+		params.put("status", message);
+		params.put(paramKey, paramMessage);
+		Log.d("Send Tweet", message);
+		try {
+			client.post(apiUrl, params, handler);
+			Log.d("Params", params.toString());
+		} catch (Exception e) {
+			Log.d("Send Tweet", e.toString());
+		}
+	}
+
 
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint

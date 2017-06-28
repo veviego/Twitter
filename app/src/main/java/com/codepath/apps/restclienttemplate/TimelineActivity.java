@@ -28,7 +28,7 @@ import cz.msebera.android.httpclient.Header;
 public class TimelineActivity extends AppCompatActivity {
 
     // Constants
-    private final int REQUEST_CODE = 20;
+    private final int NT_REQUEST_CODE = 20;
 
     private TwitterClient client;
     private TweetAdapter tweetAdapter;
@@ -211,7 +211,7 @@ public class TimelineActivity extends AppCompatActivity {
         Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
 
         // Launch compose activity and expect a result
-        startActivityForResult(i, REQUEST_CODE);
+        startActivityForResult(i, NT_REQUEST_CODE);
 
         hideProgressBar();
     }
@@ -220,7 +220,7 @@ public class TimelineActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // REQUEST_CODE is defined above
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+        if (resultCode == RESULT_OK && (requestCode == NT_REQUEST_CODE || requestCode == tweetAdapter.getREP_REQUEST_CODE())) {
             // Extract name value from result extras
             String tweetBody = data.getExtras().getString("tweetBody");
 
