@@ -233,4 +233,9 @@ public class TimelineActivity extends AppCompatActivity {
             rvTweets.scrollToPosition(0);
         }
     }
+
+    // Retweet from Timeline
+    protected void onReTweet() {
+        rvTweets.scrollToPosition(0);
+    }
 }

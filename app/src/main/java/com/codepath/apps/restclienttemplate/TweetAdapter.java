@@ -4,20 +4,25 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by veviego on 6/26/17.
@@ -25,6 +30,7 @@ import java.util.List;
 
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> {
 
+    TwitterClient client;
     private List<Tweet> mTweets;
     Context context;
 
@@ -40,6 +46,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
+        client = TwitterApplication.getRestClient();
         LayoutInflater inflater = LayoutInflater.from(context);
         View tweetView = inflater.inflate(R.layout.item_tweet, parent, false);
         ViewHolder viewHolder = new ViewHolder(tweetView);
@@ -72,11 +79,39 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
                 // Launch compose activity and expect a result
                 ((Activity) context).startActivityForResult(i, REP_REQUEST_CODE);
-
-
-                Toast.makeText(context,"test", Toast.LENGTH_SHORT).show();
             }
         });
+
+        // retweet
+        holder.ibReTweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get tweet id and call retweet
+                client.reTweet(tweet.uid, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        try {
+                            // Assemble tweet from JSON response
+                            Tweet retweeted = Tweet.fromJSON(response);
+
+                            // Notify the adapter that a new tweet has been inserted and scroll to top
+                            mTweets.add(0, retweeted);
+                            notifyItemInserted(0);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Log.d("TwitterClient", errorResponse.toString());
+                        throwable.printStackTrace();
+                    }
+                });
+            }
+        });
+
     }
 
     @Override
@@ -90,6 +125,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         public TextView tvUserName;
         public TextView tvBody;
         public ImageButton ibReply;
+        public ImageButton ibReTweet;
 
         public ViewHolder(final View itemView) {
             super(itemView);
@@ -100,6 +136,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             ibReply = (ImageButton) itemView.findViewById(R.id.ibReply);
+            ibReTweet = (ImageButton) itemView.findViewById(R.id.ibReTweet);
+
         }
     }
 
