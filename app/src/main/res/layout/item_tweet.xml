@@ -27,9 +27,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/tvBody"
         android:layout_toStartOf="@id/ibReTweet"
-        android:text="TextView" />
+        android:text="UserName" />
 
     <android.support.v7.widget.AppCompatImageButton
         android:id="@+id/ibReply"
@@ -46,14 +45,33 @@
         android:tint="@android:color/holo_blue_light" />
 
     <TextView
-        android:id="@+id/tvBody"
+        android:id="@+id/tvTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUserName"
         android:layout_marginLeft="5dp"
+        android:layout_toEndOf="@id/ivProfileImage"
+        android:layout_toStartOf="@id/ibReTweet"
+        android:text="Time" />
+
+    <TextView
+        android:id="@+id/tvBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTime"
+        android:layout_marginLeft="5dp"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:layout_toStartOf="@id/ibReTweet"
-        android:text="TextView" />
+        android:text="Body" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:layout_toStartOf="@id/tvUserName"
+        android:text="Name" />
 
 
 </RelativeLayout>
