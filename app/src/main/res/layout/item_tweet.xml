@@ -22,27 +22,38 @@
         android:layout_toStartOf="@+id/ibReply"
         app:srcCompat="@android:drawable/stat_notify_sync" />
 
-    <TextView
-        android:id="@+id/tvUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@id/ibReTweet"
-        android:text="UserName" />
-
-    <android.support.v7.widget.AppCompatImageButton
+    <ImageButton
         android:id="@+id/ibReply"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignBottom="@+id/tvBody"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:background="@android:drawable/ic_menu_revert"
         android:backgroundTint="@android:color/holo_blue_light"
-        android:paddingLeft="5dp"
-        android:text="Button"
         android:onClick="onReply"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="Button"
         android:tint="@android:color/holo_blue_light" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:layout_toStartOf="@id/ibReTweet"
+        android:text="Name" />
+
+    <TextView
+        android:id="@+id/tvUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvName"
+        android:layout_toEndOf="@id/ivProfileImage"
+        android:text="UserName" />
 
     <TextView
         android:id="@+id/tvTime"
@@ -63,15 +74,6 @@
         android:layout_toEndOf="@+id/ivProfileImage"
         android:layout_toStartOf="@id/ibReTweet"
         android:text="Body" />
-
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_toEndOf="@+id/ivProfileImage"
-        android:layout_toStartOf="@id/tvUserName"
-        android:text="Name" />
 
 
 </RelativeLayout>

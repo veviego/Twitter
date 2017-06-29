@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
@@ -64,7 +63,9 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         final Tweet tweet = mTweets.get(position);
 
         // populate the views according to this data
-        holder.tvUserName.setText(tweet.user.screenName);
+        final String userName = "@" + tweet.user.screenName;
+
+        holder.tvUserName.setText(userName);
         holder.tvName.setText(tweet.user.name);
         holder.tvTime.setText(getRelativeTimeAgo(tweet.createdAt));
 
@@ -90,25 +91,25 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             }
         });
 
-        // retweet
+        // retweet and unretweet
         holder.ibReTweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Get tweet id and call retweet
-                client.reTweet(tweet.uid, new JsonHttpResponseHandler() {
+                client.reTweet(tweet.uid, tweet.retweeted, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        try {
-                            // Assemble tweet from JSON response
-                            Tweet retweeted = Tweet.fromJSON(response);
 
-                            // Notify the adapter that a new tweet has been inserted and scroll to top
-                            mTweets.add(0, retweeted);
-                            notifyItemInserted(0);
+                        // Change status of tweet without refreshing
+                        tweet.setRetweeted(!tweet.retweeted);
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        // Just log a success, no need to send a new tweet to top of feed
+                        // TODO -- change the view so it says you've retweeted that individual tweet
+                        Log.i("Retweet/Unretweet", "success");
+
+                        // Notify the adapter that a new tweet has been inserted and scroll to top
+                        // mTweets.add(0, retweeted);
+                        // notifyItemInserted(0);
                     }
 
                     @Override
@@ -185,6 +186,35 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        // tokenize string to get number
+        String[] components = relativeDate.split(" ");
+        String number = components[0];
+
+        // search to see if it contains minutes, days, hours, or seconds
+        for (int i = 0; i < components.length; i++) {
+            switch (components[i]) {
+                case "second":
+                    relativeDate = number + "s";
+                    break;
+                case "seconds":
+                    relativeDate = number + "s";
+                    break;
+                case "minute":
+                    relativeDate = number + "m";
+                    break;
+                case "minutes":
+                    relativeDate = number + "m";
+                    break;
+                case "day":
+                    relativeDate = number + "d";
+                    break;
+                case "days":
+                    relativeDate = number + "d";
+                    break;
+            }
+        }
+
 
         return relativeDate;
     }
