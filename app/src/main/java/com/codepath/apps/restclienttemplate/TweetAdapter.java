@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
  * Created by veviego on 6/26/17.
@@ -73,7 +74,18 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
         holder.tvBody.setText(tweet.body);
 
-        Glide.with(context).load(tweet.user.profileImageUrl).into(holder.ivProfileImage);
+        // load profile image with glide
+        Glide.with(context)
+                .load(tweet.user.profileImageUrl)
+                .bitmapTransform(new RoundedCornersTransformation(context, 15, 0))
+
+                .into(holder.ivProfileImage);
+
+        // load media using glide
+        Glide.with(context)
+                .load(tweet.entity.media_url)
+                .bitmapTransform(new RoundedCornersTransformation(context, 25, 0))
+                .into(holder.ivMedia);
 
         holder.ibReply.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,6 +193,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         public ImageButton ibReply;
         public ImageButton ibReTweet;
         public ImageButton ibFavorite;
+        public ImageView ivMedia;
 
         public ViewHolder(final View itemView) {
             super(itemView);
@@ -195,6 +208,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             ibReply = (ImageButton) itemView.findViewById(R.id.ibReply);
             ibReTweet = (ImageButton) itemView.findViewById(R.id.ibReTweet);
             ibFavorite = (ImageButton) itemView.findViewById(R.id.ibFavorite);
+            ivMedia = (ImageView) itemView.findViewById(R.id.ivMedia);
 
         }
     }

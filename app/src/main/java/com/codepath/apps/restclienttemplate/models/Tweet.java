@@ -18,6 +18,7 @@ public class Tweet {
     public String createdAt;
     public boolean retweeted;
     public boolean favorited;
+    public Entity entity;
 
     // empty constructor needed for pareceler
     public Tweet() {}
@@ -33,6 +34,7 @@ public class Tweet {
         tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
         tweet.retweeted =  jsonObject.getBoolean("retweeted");
         tweet.favorited = jsonObject.getBoolean("favorited");
+        tweet.entity = Entity.fromJSON(jsonObject.getJSONObject("entities"));
         return tweet;
     }
 
