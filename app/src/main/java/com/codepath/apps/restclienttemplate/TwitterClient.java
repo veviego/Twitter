@@ -98,6 +98,26 @@ public class TwitterClient extends OAuthBaseClient {
 		}
 	}
 
+	// Favorite function
+	public void favorite(long id, boolean favorited, AsyncHttpResponseHandler handler) {
+		String apiUrl;
+
+		if (favorited) {
+			apiUrl = getApiUrl("favorites/destroy.json");
+		} else {
+			apiUrl = getApiUrl("favorites/create.json");
+		}
+
+		RequestParams params = new RequestParams();
+		params.put("id", id);
+
+		try {
+			client.post(apiUrl, params, handler);
+		} catch (Exception e) {
+			Log.d("Favorite", e.toString());
+		}
+	}
+
 
 
 

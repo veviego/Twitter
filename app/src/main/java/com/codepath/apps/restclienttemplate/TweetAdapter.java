@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -107,6 +108,48 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                         // TODO -- change the view so it says you've retweeted that individual tweet
                         Log.i("Retweet/Unretweet", "success");
 
+                        if (tweet.retweeted) {
+                            Toast.makeText(context, "Retweeted", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(context, "Unretweeted", Toast.LENGTH_LONG).show();
+                        }
+
+                        // Notify the adapter that a new tweet has been inserted and scroll to top
+                        // mTweets.add(0, retweeted);
+                        // notifyItemInserted(0);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Log.d("TwitterClient", errorResponse.toString());
+                        throwable.printStackTrace();
+                    }
+                });
+            }
+        });
+
+        // favorite and unfavorite
+        holder.ibFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get tweet id and call favorite
+                client.favorite(tweet.uid, tweet.favorited, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                        // Change status of tweet without refreshing
+                        tweet.setFavorited(!tweet.favorited);
+
+                        // Just log a success, no need to send a new tweet to top of feed
+                        // TODO -- change the view so it says you've retweeted that individual tweet
+                        Log.i("Favorite/Unfavorite", "success");
+
+                        if (tweet.retweeted) {
+                            Toast.makeText(context, "Favorited", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(context, "Unfavorited", Toast.LENGTH_LONG).show();
+                        }
+
                         // Notify the adapter that a new tweet has been inserted and scroll to top
                         // mTweets.add(0, retweeted);
                         // notifyItemInserted(0);
@@ -137,6 +180,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         public TextView tvTime;
         public ImageButton ibReply;
         public ImageButton ibReTweet;
+        public ImageButton ibFavorite;
 
         public ViewHolder(final View itemView) {
             super(itemView);
@@ -150,6 +194,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvTime = (TextView) itemView.findViewById(R.id.tvTime);
             ibReply = (ImageButton) itemView.findViewById(R.id.ibReply);
             ibReTweet = (ImageButton) itemView.findViewById(R.id.ibReTweet);
+            ibFavorite = (ImageButton) itemView.findViewById(R.id.ibFavorite);
 
         }
     }

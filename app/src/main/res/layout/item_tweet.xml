@@ -75,5 +75,14 @@
         android:layout_toStartOf="@id/ibReTweet"
         android:text="Body" />
 
+    <ImageButton
+        android:id="@+id/ibFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/ibReply"
+        android:tint="@android:color/holo_blue_light"
+        app:srcCompat="@android:drawable/star_off" />
+
 
 </RelativeLayout>
