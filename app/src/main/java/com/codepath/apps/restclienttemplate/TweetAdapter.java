@@ -97,6 +97,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
         // Set button colors
         changeColor(holder.ibReTweet, tweet.retweeted, R.drawable.retweet_stroke, R.drawable.retweet);
+        changeColor(holder.ibFavorite, tweet.favorited, R.drawable.favorite_stroke, R.drawable.favorite);
 
         holder.ibReply.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -257,9 +258,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                             Toast.makeText(context, "Unfavorited", Toast.LENGTH_LONG).show();
                         }
 
-                        // Notify the adapter that a new tweet has been inserted and scroll to top
-                        // mTweets.add(0, retweeted);
-                        // notifyItemInserted(0);
+                        changeColor(holder.ibFavorite, tweet.favorited, R.drawable.favorite_stroke, R.drawable.favorite);
+
                     }
 
                     @Override
@@ -338,7 +338,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             TextView tvTime;
             ImageButton ibReply;
             final ImageButton ibReTweet;
-            ImageButton ibFavorite;
+            final ImageButton ibFavorite;
             ImageView ivMedia;
 
             // perform findViewByID lookups
@@ -376,6 +376,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
             // Set button colors
             changeColor(ibReTweet, dialogTweet.retweeted, R.drawable.retweet_stroke, R.drawable.retweet);
+            changeColor(ibFavorite, dialogTweet.favorited, R.drawable.favorite_stroke, R.drawable.favorite);
+
 
 
             // Create an alert dialog builder
@@ -546,9 +548,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                                 Toast.makeText(context, "Unfavorited", Toast.LENGTH_LONG).show();
                             }
 
-                            // Notify the adapter that a new tweet has been inserted and scroll to top
-                            // mTweets.add(0, retweeted);
-                            // notifyItemInserted(0);
+                            changeColor(ibFavorite, dialogTweet.favorited, R.drawable.favorite_stroke, R.drawable.favorite);
+
                         }
 
                         @Override
