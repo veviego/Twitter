@@ -2,16 +2,24 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -36,6 +44,9 @@ public class TimelineActivity extends AppCompatActivity {
     private RecyclerView rvTweets;
     private SwipeRefreshLayout swipeContainer;
     MenuItem miActionProgressItem;
+    EditText message;
+
+    private boolean dialogOpen = false;
 
 
     @Override
@@ -205,16 +216,88 @@ public class TimelineActivity extends AppCompatActivity {
 
     // Establish event handler for compose icon
     public void onComposeAction (MenuItem mi) {
+
+        // Show the progress bar until the modal loads
         showProgressBar();
 
-        // Create intent
-        Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
+        // Inflate the compose dialog
+        View composeView = LayoutInflater.from(this).inflate(R.layout.activity_compose, null);
+        // Create the Alert Dialog Builder
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        // Set the view that the alert dialog builder should create
+        alertDialogBuilder.setView(composeView);
+        final AlertDialog alertDialog = alertDialogBuilder.create();
 
-        // Launch compose activity and expect a result
-        startActivityForResult(i, NT_REQUEST_CODE);
+        // Get EditText for tweet body and set listener
+        message = (EditText) composeView.findViewById(R.id.etMessageBox);
+        final TextView charCount = (TextView) composeView.findViewById(R.id.tvCharCount);
+        message.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                int available = 140 - message.getText().toString().length();
+                String num = available + " / 140";
+                charCount.setText(num);
+            }
+        });
+
+
+
+
+
+
+        // Open the dialog and hide the progress bar
+        alertDialog.show();
         hideProgressBar();
     }
+
+    public void onSubmit(View view) {
+        final String tweetBody = message.getText().toString();
+        showProgressBar();
+
+        // Post a new tweet
+        client.sendTweet(tweetBody, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+
+                    Tweet posted = Tweet.fromJSON(response);
+
+                    // Create a new intent to place the message data in
+                    Intent data = new Intent();
+
+                    // Pass back the relevant data
+                    data.putExtra("justTweeted", Parcels.wrap(posted));
+
+                    // Activity finished ok, return the data
+                    setResult(RESULT_OK, data); // set result code and bundle data for response
+                    hideProgressBar();
+                    finish(); // closes the activity, pass data to parent
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("Compose Message", errorResponse.toString());
+            }
+        });
+
+        
+
+    }
+
 
     // Handler for return of data
     @Override
@@ -238,4 +321,13 @@ public class TimelineActivity extends AppCompatActivity {
     protected void onReTweet() {
         rvTweets.scrollToPosition(0);
     }
+
+    void showTweetDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        TweetDialog tweetDialog = TweetDialog.newInstance("Some Title");
+        tweetDialog.show(fm, "fragment_edit_name");
+    }
+
+
+
 }

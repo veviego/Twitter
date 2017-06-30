@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="5dp">
+    android:id="@+id/edit_name"
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:layout_gravity="center" android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:id="@+id/ivProfileImage"
@@ -26,15 +25,16 @@
         android:id="@+id/ibReply"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_alignBottom="@+id/tvBody"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
         android:background="@android:drawable/ic_menu_revert"
         android:backgroundTint="@android:color/holo_blue_light"
         android:onClick="onReply"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:text="Button"
-        android:tint="@android:color/holo_blue_light"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:tint="@android:color/holo_blue_light" />
 
     <TextView
         android:id="@+id/tvName"
@@ -91,6 +91,4 @@
         android:layout_centerInParent="true"
         android:tint="@android:color/holo_blue_light"
         app:srcCompat="@android:drawable/ic_menu_camera" />
-
-
 </RelativeLayout>

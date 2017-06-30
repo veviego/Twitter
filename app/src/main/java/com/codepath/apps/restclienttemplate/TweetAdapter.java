@@ -3,6 +3,7 @@ package com.codepath.apps.restclienttemplate;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -156,7 +157,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                         // TODO -- change the view so it says you've retweeted that individual tweet
                         Log.i("Favorite/Unfavorite", "success");
 
-                        if (tweet.retweeted) {
+                        if (tweet.favorited) {
                             Toast.makeText(context, "Favorited", Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(context, "Unfavorited", Toast.LENGTH_LONG).show();
@@ -184,7 +185,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
     }
 
     // create ViewHolder class
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView ivProfileImage;
         public TextView tvUserName;
         public TextView tvName;
@@ -209,6 +210,185 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             ibReTweet = (ImageButton) itemView.findViewById(R.id.ibReTweet);
             ibFavorite = (ImageButton) itemView.findViewById(R.id.ibFavorite);
             ivMedia = (ImageView) itemView.findViewById(R.id.ivMedia);
+
+            // Set the onclick listener for the recycler
+            itemView.setOnClickListener(this);
+
+        }
+
+        // when the user clicks on a row, show MovieDetailsActivity for the selected movie
+        @Override
+        public void onClick(View v) {
+            // gets item position
+            int position = getAdapterPosition();
+            // make sure the position is valid, i.e. actually exists in the view
+            if (position != RecyclerView.NO_POSITION) {
+                // get the movie at the position, this won't work if the class is static
+                Tweet tweet = mTweets.get(position);
+
+                // Tweet
+                showTweetDetailsDialog(tweet);
+
+            }
+        }
+
+        private void showTweetDetailsDialog(final Tweet dialogTweet) {
+            // Inflate the tweet details fragment
+            View tweetDetails = LayoutInflater.from(context).inflate(R.layout.fragment_tweet_info, null);
+
+            ImageView ivProfileImage;
+            TextView tvUserName;
+            TextView tvName;
+            TextView tvBody;
+            TextView tvTime;
+            ImageButton ibReply;
+            ImageButton ibReTweet;
+            ImageButton ibFavorite;
+            ImageView ivMedia;
+
+            // perform findViewByID lookups
+            ivProfileImage = (ImageView) tweetDetails.findViewById(R.id.ivProfileImage);
+            tvUserName = (TextView) tweetDetails.findViewById(R.id.tvUserName);
+            tvName = (TextView) tweetDetails.findViewById(R.id.tvName);
+            tvBody = (TextView) tweetDetails.findViewById(R.id.tvBody);
+            tvTime = (TextView) tweetDetails.findViewById(R.id.tvTime);
+            ibReply = (ImageButton) tweetDetails.findViewById(R.id.ibReply);
+            ibReTweet = (ImageButton) tweetDetails.findViewById(R.id.ibReTweet);
+            ibFavorite = (ImageButton) tweetDetails.findViewById(R.id.ibFavorite);
+            ivMedia = (ImageView) tweetDetails.findViewById(R.id.ivMedia);
+
+
+            // populate the views according to this data
+            final String userName = "@" + dialogTweet.user.screenName;
+
+            tvUserName.setText(userName);
+            tvName.setText(dialogTweet.user.name);
+            tvTime.setText(getRelativeTimeAgo(dialogTweet.createdAt));
+            tvBody.setText(dialogTweet.body);
+
+            // load profile image with glide
+            Glide.with(context)
+                    .load(dialogTweet.user.profileImageUrl)
+                    .bitmapTransform(new RoundedCornersTransformation(context, 15, 0))
+
+                    .into(ivProfileImage);
+
+            // load media using glide
+            Glide.with(context)
+                    .load(dialogTweet.entity.media_url)
+                    .bitmapTransform(new RoundedCornersTransformation(context, 25, 0))
+                    .into(ivMedia);
+
+
+            ibReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Create intent
+                    Intent i = new Intent(context, ComposeActivity.class);
+
+                    // Attach tweet to intent
+                    i.putExtra("currentTweet", Parcels.wrap(dialogTweet));
+
+                    // Add request code to intent
+                    i.putExtra("request_code", REP_REQUEST_CODE);
+
+                    // Launch compose activity and expect a result
+                    ((Activity) context).startActivityForResult(i, REP_REQUEST_CODE);
+                }
+            });
+
+            // retweet and unretweet
+            ibReTweet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Get tweet id and call retweet
+                    client.reTweet(dialogTweet.uid, dialogTweet.retweeted, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                            // Change status of tweet without refreshing
+                            dialogTweet.setRetweeted(!dialogTweet.retweeted);
+
+                            // Just log a success, no need to send a new tweet to top of feed
+                            // TODO -- change the view so it says you've retweeted that individual tweet
+                            Log.i("Retweet/Unretweet", "success");
+
+                            if (dialogTweet.retweeted) {
+                                Toast.makeText(context, "Retweeted", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(context, "Unretweeted", Toast.LENGTH_LONG).show();
+                            }
+
+                            // Notify the adapter that a new tweet has been inserted and scroll to top
+                            // mTweets.add(0, retweeted);
+                            // notifyItemInserted(0);
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            Log.d("TwitterClient", errorResponse.toString());
+                            throwable.printStackTrace();
+                        }
+                    });
+                }
+            });
+
+            // favorite and unfavorite
+            ibFavorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Get tweet id and call favorite
+                    client.favorite(dialogTweet.uid, dialogTweet.favorited, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                            // Change status of tweet without refreshing
+                            dialogTweet.setFavorited(!dialogTweet.favorited);
+
+                            // Just log a success, no need to send a new tweet to top of feed
+                            // TODO -- change the view so it says you've retweeted that individual tweet
+                            Log.i("Favorite/Unfavorite", "success");
+
+                            if (dialogTweet.favorited) {
+                                Toast.makeText(context, "Favorited", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(context, "Unfavorited", Toast.LENGTH_LONG).show();
+                            }
+
+                            // Notify the adapter that a new tweet has been inserted and scroll to top
+                            // mTweets.add(0, retweeted);
+                            // notifyItemInserted(0);
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            Log.d("TwitterClient", errorResponse.toString());
+                            throwable.printStackTrace();
+                        }
+                    });
+                }
+            });
+
+
+
+
+
+
+
+            // Create an alert dialog builder
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+
+            // Set the view of the alert Dialog
+            alertDialogBuilder.setView(tweetDetails);
+
+
+
+            // Create the alert dialog
+            final AlertDialog alertDialog = alertDialogBuilder.create();
+
+            // Display the tweet details
+            alertDialog.show();
+
 
         }
     }

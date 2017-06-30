@@ -8,4 +8,7 @@
     <string name="reply_request">40</string>
     <string name="reply_param_key">in_reply_to_status_id</string>
 
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
