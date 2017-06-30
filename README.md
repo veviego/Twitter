@@ -49,6 +49,7 @@ The following **additional** features are implemented:
 * [x] User can unretweet using the same retweet button in either the timeline or detial view
 * [x] Favorite and rewteet buttons change color when such actions are taken or have been previously taken
 * [x] Button statuses are up to date in both the detail view (modal) and timeline regardless of where the button was pressed
+* [x] When replying to a tweet the user's cursor is automatically set after the @username required
 
 ## Video Walkthrough
 
@@ -68,7 +69,7 @@ Describe any challenges encountered while building the app.
 
 ## License
 
-    Copyright [yyyy] [name of copyright owner]
+    Copyright [2017] [Vincent Viego]
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
