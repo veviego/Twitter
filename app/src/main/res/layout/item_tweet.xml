@@ -33,8 +33,9 @@
         android:paddingRight="5dp"
         android:text="Button"
         android:tint="@android:color/holo_blue_light"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignTop="@+id/tvTime"
+        android:layout_toStartOf="@+id/ibFavorite"
+        android:layout_marginEnd="12dp" />
 
     <TextView
         android:id="@+id/tvName"
@@ -61,7 +62,6 @@
         android:layout_below="@+id/tvUserName"
         android:layout_marginLeft="5dp"
         android:layout_toEndOf="@id/ivProfileImage"
-        android:layout_toStartOf="@id/ibReTweet"
         android:text="Time" />
 
     <TextView
@@ -71,7 +71,6 @@
         android:layout_below="@+id/tvTime"
         android:layout_marginLeft="5dp"
         android:layout_toEndOf="@+id/ivProfileImage"
-        android:layout_toStartOf="@id/ibReTweet"
         android:text="Body" />
 
     <ImageButton

@@ -289,9 +289,10 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.d("Compose Message", errorResponse.toString());
             }
         });
+    }
 
-
-
+    public void onCancel(View view) {
+        composeAlertDialog.cancel();
     }
 
 
