@@ -37,4 +37,8 @@ public class Entity {
         }
         return entity;
     }
+
+    public void setMedia_url(String media_url) {
+        this.media_url = media_url;
+    }
 }

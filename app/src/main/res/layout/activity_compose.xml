@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="visible"
-    tools:context="com.codepath.apps.restclienttemplate.ComposeActivity">
+    tools:context="com.codepath.apps.restclienttemplate.ComposeActivity"
+    android:layout_margin="10dp">
 
     <EditText
         android:id="@+id/etMessageBox"
@@ -26,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/etMessageBox"
+        android:layout_marginBottom="10dp"
         android:backgroundTint="@color/twitter_blue_30"
         android:onClick="onSubmit"
         android:text="Tweet"
@@ -37,6 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/etMessageBox"
+        android:layout_marginBottom="10dp"
         android:backgroundTint="@color/twitter_blue_30"
         android:onClick="onCancel"
         android:text="Cancel"
@@ -46,11 +49,12 @@
         android:id="@+id/tvCharCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="140 / 140"
         android:layout_alignBaseline="@+id/btTweetButton"
         android:layout_alignBottom="@+id/btTweetButton"
+        android:layout_marginBottom="10dp"
         android:layout_toStartOf="@+id/btTweetButton"
-        android:paddingRight="8dp"/>
+        android:paddingRight="8dp"
+        android:text="140 / 140" />
 
 
 </RelativeLayout>

@@ -2,7 +2,8 @@
     android:id="@+id/edit_name"
     android:layout_width="wrap_content" android:layout_height="wrap_content"
     android:layout_gravity="center" android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="10dp">
 
     <ImageView
         android:id="@+id/ivProfileImage"
@@ -68,9 +69,10 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@id/ivProfileImage"
         android:layout_below="@id/ivMedia"
-        android:background="@drawable/retweet"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:background="@drawable/retweet" />
 
     <ImageButton
         android:id="@+id/ibReply"

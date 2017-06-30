@@ -267,6 +267,7 @@ public class TimelineActivity extends AppCompatActivity {
                     try {
 
                         Tweet posted = Tweet.fromJSON(response);
+                        posted.entity.setMedia_url(null);
 
                         // Notify the adapter that a new tweet has been inserted and scroll to top
                         tweets.add(0, posted);

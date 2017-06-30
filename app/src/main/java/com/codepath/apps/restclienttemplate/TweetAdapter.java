@@ -89,10 +89,13 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
         if (!(tweet.entity.media_url == null)) {
             // load media using glide
+            holder.ivMedia.setVisibility(View.VISIBLE);
             Glide.with(context)
                     .load(tweet.entity.media_url)
                     .bitmapTransform(new RoundedCornersTransformation(context, 25, 0))
                     .into(holder.ivMedia);
+        } else {
+            holder.ivMedia.setVisibility(View.GONE);
         }
 
         // Set button colors
@@ -221,12 +224,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                         }
 
                         changeColor(holder.ibReTweet, tweet.retweeted, R.drawable.retweet_stroke, R.drawable.retweet);
-                        notifyItemChanged(position);
 
-
-                        // Notify the adapter that a new tweet has been inserted and scroll to top
-                        // mTweets.add(0, retweeted);
-                        // notifyItemInserted(0);
                     }
 
                     @Override
@@ -261,8 +259,6 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                         }
 
                         changeColor(holder.ibFavorite, tweet.favorited, R.drawable.favorite_stroke, R.drawable.favorite);
-                        notifyItemChanged(position);
-
 
                     }
 
