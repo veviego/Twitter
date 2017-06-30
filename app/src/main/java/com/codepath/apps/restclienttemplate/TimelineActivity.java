@@ -228,7 +228,6 @@ public class TimelineActivity extends AppCompatActivity {
         alertDialogBuilder.setView(composeView);
         composeAlertDialog = alertDialogBuilder.create();
 
-
         // Get EditText for tweet body and set listener
         message = (EditText) composeView.findViewById(R.id.etMessageBox);
         final TextView charCount = (TextView) composeView.findViewById(R.id.tvCharCount);
@@ -251,13 +250,12 @@ public class TimelineActivity extends AppCompatActivity {
             }
         });
 
-
         // Open the dialog and hide the progress bar
         composeAlertDialog.show();
         hideProgressBar();
     }
 
-    public void onSubmit(View view) {
+    public void onSubmit(View v) {
         final String tweetBody = message.getText().toString();
         showProgressBar();
 
