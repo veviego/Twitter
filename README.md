@@ -50,6 +50,7 @@ The following **additional** features are implemented:
 * [x] Favorite and rewteet buttons change color when such actions are taken or have been previously taken
 * [x] Button statuses are up to date in both the detail view (modal) and timeline regardless of where the button was pressed
 * [x] When replying to a tweet the user's cursor is automatically set after the @username required
+* [x] Favorite count and retweet count are displayed next to buttons and change colors appropriately depending on state
 
 ## Video Walkthrough
 
