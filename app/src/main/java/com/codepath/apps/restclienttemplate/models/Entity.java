@@ -22,13 +22,19 @@ public class Entity {
 
     // deserialize the JSON
     public static Entity fromJSON(JSONObject json) throws JSONException {
-        JSONArray info = json.getJSONArray("media");
-        JSONObject first = info.getJSONObject(0);
         Entity entity = new Entity();
 
-        // extract and fill the values
-        entity.eid = first.getLong("id");
-        entity.media_url = first.getString("media_url");
+
+        try {
+            JSONArray info = json.getJSONArray("media");
+            JSONObject first = info.getJSONObject(0);
+
+            // extract and fill the values
+            entity.eid = first.getLong("id");
+            entity.media_url = first.getString("media_url");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return entity;
     }
 }

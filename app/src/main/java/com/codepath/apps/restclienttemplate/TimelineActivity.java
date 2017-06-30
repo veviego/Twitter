@@ -45,6 +45,7 @@ public class TimelineActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeContainer;
     MenuItem miActionProgressItem;
     EditText message;
+    AlertDialog composeAlertDialog;
 
     private boolean dialogOpen = false;
 
@@ -226,7 +227,7 @@ public class TimelineActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         // Set the view that the alert dialog builder should create
         alertDialogBuilder.setView(composeView);
-        final AlertDialog alertDialog = alertDialogBuilder.create();
+        composeAlertDialog = alertDialogBuilder.create();
 
         // Get EditText for tweet body and set listener
         message = (EditText) composeView.findViewById(R.id.etMessageBox);
@@ -251,12 +252,8 @@ public class TimelineActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
         // Open the dialog and hide the progress bar
-        alertDialog.show();
+        composeAlertDialog.show();
         hideProgressBar();
     }
 
@@ -272,16 +269,14 @@ public class TimelineActivity extends AppCompatActivity {
 
                     Tweet posted = Tweet.fromJSON(response);
 
-                    // Create a new intent to place the message data in
-                    Intent data = new Intent();
+                    // Notify the adapter that a new tweet has been inserted and scroll to top
+                    tweets.add(0, posted);
+                    tweetAdapter.notifyItemInserted(0);
+                    rvTweets.scrollToPosition(0);
 
-                    // Pass back the relevant data
-                    data.putExtra("justTweeted", Parcels.wrap(posted));
-
-                    // Activity finished ok, return the data
-                    setResult(RESULT_OK, data); // set result code and bundle data for response
                     hideProgressBar();
-                    finish(); // closes the activity, pass data to parent
+                    composeAlertDialog.cancel();
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -294,7 +289,7 @@ public class TimelineActivity extends AppCompatActivity {
             }
         });
 
-        
+
 
     }
 
