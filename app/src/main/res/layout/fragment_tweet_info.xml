@@ -79,6 +79,17 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"/>
 
+    <TextView
+        android:id="@+id/tvRetweetCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ibReTweet"
+        android:layout_toEndOf="@+id/ibReTweet"
+        android:text="Retweets"
+        android:textColor="@color/twitter_blue_30"
+        android:layout_marginLeft="5dp"
+        android:textSize="12sp" />
+
     <ImageButton
         android:id="@+id/ibReply"
         android:layout_width="wrap_content"
@@ -91,6 +102,17 @@
         android:layout_alignTop="@+id/ibReTweet"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:id="@+id/tvFavoriteCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ibFavorite"
+        android:text="Favorites"
+        android:layout_alignEnd="@+id/tvTime"
+        android:textColor="@color/twitter_blue_30"
+        android:layout_marginLeft="5dp"
+        android:textSize="12sp" />
+
     <ImageButton
         android:id="@+id/ibFavorite"
         android:layout_width="wrap_content"
@@ -99,7 +121,7 @@
         android:paddingTop="5dp"
         android:layout_alignTop="@+id/ibReTweet"
         android:background="@drawable/favorite"
-        android:layout_alignEnd="@+id/tvTime" />
+        android:layout_toStartOf="@id/tvFavoriteCount"/>
 
 
 </RelativeLayout>

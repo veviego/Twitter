@@ -19,6 +19,8 @@ public class Tweet {
     public boolean retweeted;
     public boolean favorited;
     public Entity entity;
+    public int retweetCount;
+    public int favoriteCount;
 
     // empty constructor needed for pareceler
     public Tweet() {}
@@ -35,6 +37,8 @@ public class Tweet {
         tweet.retweeted =  jsonObject.getBoolean("retweeted");
         tweet.favorited = jsonObject.getBoolean("favorited");
         tweet.entity = Entity.fromJSON(jsonObject.getJSONObject("entities"));
+        tweet.retweetCount = jsonObject.getInt("retweet_count");
+        tweet.favoriteCount = jsonObject.getInt("favorite_count");
         return tweet;
     }
 
@@ -44,5 +48,15 @@ public class Tweet {
 
     public void setFavorited(boolean favorited) {
         this.favorited = favorited;
+    }
+
+    // setters for retweet and favorite counts
+
+    public void setRetweetCount(int retweetCount) {
+        this.retweetCount = retweetCount;
+    }
+
+    public void setFavoriteCount(int favoriteCount) {
+        this.favoriteCount = favoriteCount;
     }
 }

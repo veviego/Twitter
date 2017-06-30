@@ -75,6 +75,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         holder.tvUserName.setText(userName);
         holder.tvName.setText(tweet.user.name);
         holder.tvTime.setText(getRelativeTimeAgo(tweet.createdAt));
+        holder.tvRetweetCount.setText(String.valueOf(tweet.retweetCount));
+        holder.tvFavoriteCount.setText(String.valueOf(tweet.favoriteCount));
 
 
         holder.tvBody.setText(tweet.body);
@@ -101,6 +103,18 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         // Set button colors
         changeColor(holder.ibReTweet, tweet.retweeted, R.drawable.retweet_stroke, R.drawable.retweet);
         changeColor(holder.ibFavorite, tweet.favorited, R.drawable.favorite_stroke, R.drawable.favorite);
+
+        // Set counters' text colors
+        if (tweet.retweeted) {
+            holder.tvRetweetCount.setTextColor(context.getResources().getColor(R.color.medium_green));
+        } else {
+            holder.tvRetweetCount.setTextColor(context.getResources().getColor(R.color.twitter_blue_30));
+        }
+        if (tweet.favorited) {
+            holder.tvFavoriteCount.setTextColor(context.getResources().getColor(R.color.medium_red));
+        } else {
+            holder.tvFavoriteCount.setTextColor(context.getResources().getColor(R.color.twitter_blue_30));
+        }
 
         holder.ibReply.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +170,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                     }
                 });
 
-                // Reply retweet button
+                // Reply tweet button
                 final Button btTweetButton = (Button) composeView.findViewById(R.id.btTweetButton);
                 btTweetButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -213,14 +227,22 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                         // Change status of tweet without refreshing
                         tweet.setRetweeted(!tweet.retweeted);
 
+
                         // Just log a success, no need to send a new tweet to top of feed
                         // TODO -- change the view so it says you've retweeted that individual tweet
                         Log.i("Retweet/Unretweet", "success");
 
+                        // Toast and update retweet count
                         if (tweet.retweeted) {
                             Toast.makeText(context, "Retweeted", Toast.LENGTH_LONG).show();
+                            tweet.setRetweetCount(tweet.retweetCount + 1);
+                            holder.tvRetweetCount.setTextColor(context.getResources().getColor(R.color.medium_green));
+                            holder.tvRetweetCount.setText(String.valueOf(tweet.retweetCount));
                         } else {
                             Toast.makeText(context, "Unretweeted", Toast.LENGTH_LONG).show();
+                            tweet.setRetweetCount(tweet.retweetCount - 1);
+                            holder.tvRetweetCount.setTextColor(context.getResources().getColor(R.color.twitter_blue_30));
+                            holder.tvRetweetCount.setText(String.valueOf(tweet.retweetCount));
                         }
 
                         changeColor(holder.ibReTweet, tweet.retweeted, R.drawable.retweet_stroke, R.drawable.retweet);
@@ -254,8 +276,15 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
                         if (tweet.favorited) {
                             Toast.makeText(context, "Favorited", Toast.LENGTH_LONG).show();
+                            tweet.setFavoriteCount(tweet.favoriteCount + 1);
+                            holder.tvFavoriteCount.setTextColor(context.getResources().getColor(R.color.medium_red));
+                            holder.tvFavoriteCount.setText(String.valueOf(tweet.favoriteCount));
+
                         } else {
                             Toast.makeText(context, "Unfavorited", Toast.LENGTH_LONG).show();
+                            tweet.setFavoriteCount(tweet.favoriteCount - 1);
+                            holder.tvFavoriteCount.setTextColor(context.getResources().getColor(R.color.twitter_blue_30));
+                            holder.tvFavoriteCount.setText(String.valueOf(tweet.favoriteCount));
                         }
 
                         changeColor(holder.ibFavorite, tweet.favorited, R.drawable.favorite_stroke, R.drawable.favorite);
@@ -290,6 +319,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         public ImageButton ibReTweet;
         public ImageButton ibFavorite;
         public ImageView ivMedia;
+        public TextView tvFavoriteCount;
+        public TextView tvRetweetCount;
 
         public ViewHolder(final View itemView) {
             super(itemView);
@@ -305,6 +336,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             ibReTweet = (ImageButton) itemView.findViewById(R.id.ibReTweet);
             ibFavorite = (ImageButton) itemView.findViewById(R.id.ibFavorite);
             ivMedia = (ImageView) itemView.findViewById(R.id.ivMedia);
+            tvFavoriteCount = (TextView) itemView.findViewById(R.id.tvFavoriteCount);
+            tvRetweetCount = (TextView) itemView.findViewById(R.id.tvRetweetCount);
 
             // Set the onclick listener for the recycler
             itemView.setOnClickListener(this);
@@ -340,6 +373,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             final ImageButton ibReTweet;
             final ImageButton ibFavorite;
             ImageView ivMedia;
+            final TextView tvFavoriteCount;
+            final TextView tvRetweetCount;
 
             // perform findViewByID lookups
             ivProfileImage = (ImageView) tweetDetails.findViewById(R.id.ivProfileImage);
@@ -351,6 +386,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             ibReTweet = (ImageButton) tweetDetails.findViewById(R.id.ibReTweet);
             ibFavorite = (ImageButton) tweetDetails.findViewById(R.id.ibFavorite);
             ivMedia = (ImageView) tweetDetails.findViewById(R.id.ivMedia);
+            tvFavoriteCount = (TextView) tweetDetails.findViewById(R.id.tvFavoriteCount);
+            tvRetweetCount = (TextView) tweetDetails.findViewById(R.id.tvRetweetCount);
 
 
             // populate the views according to this data
@@ -360,6 +397,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvName.setText(dialogTweet.user.name);
             tvTime.setText(getRelativeTimeAgo(dialogTweet.createdAt));
             tvBody.setText(dialogTweet.body);
+            tvFavoriteCount.setText(String.valueOf(dialogTweet.favoriteCount));
+            tvRetweetCount.setText(String.valueOf(dialogTweet.retweetCount));
 
             // load profile image with glide
             Glide.with(context)
@@ -378,7 +417,17 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             changeColor(ibReTweet, dialogTweet.retweeted, R.drawable.retweet_stroke, R.drawable.retweet);
             changeColor(ibFavorite, dialogTweet.favorited, R.drawable.favorite_stroke, R.drawable.favorite);
 
-
+            // Set counters' text colors
+            if (dialogTweet.retweeted) {
+                tvRetweetCount.setTextColor(context.getResources().getColor(R.color.medium_green));
+            } else {
+                tvRetweetCount.setTextColor(context.getResources().getColor(R.color.twitter_blue_30));
+            }
+            if (dialogTweet.favorited) {
+                tvFavoriteCount.setTextColor(context.getResources().getColor(R.color.medium_red));
+            } else {
+                tvFavoriteCount.setTextColor(context.getResources().getColor(R.color.twitter_blue_30));
+            }
 
             // Create an alert dialog builder
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
@@ -509,8 +558,14 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
                             if (dialogTweet.retweeted) {
                                 Toast.makeText(context, "Retweeted", Toast.LENGTH_LONG).show();
+                                dialogTweet.setRetweetCount(dialogTweet.retweetCount + 1);
+                                tvRetweetCount.setTextColor(context.getResources().getColor(R.color.medium_green));
+                                tvRetweetCount.setText(String.valueOf(dialogTweet.retweetCount));
                             } else {
                                 Toast.makeText(context, "Unretweeted", Toast.LENGTH_LONG).show();
+                                dialogTweet.setRetweetCount(dialogTweet.retweetCount - 1);
+                                tvRetweetCount.setTextColor(context.getResources().getColor(R.color.twitter_blue_30));
+                                tvRetweetCount.setText(String.valueOf(dialogTweet.retweetCount));
                             }
 
                             changeColor(ibReTweet, dialogTweet.retweeted, R.drawable.retweet_stroke, R.drawable.retweet);
@@ -545,8 +600,14 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
                             if (dialogTweet.favorited) {
                                 Toast.makeText(context, "Favorited", Toast.LENGTH_LONG).show();
+                                dialogTweet.setFavoriteCount(dialogTweet.favoriteCount + 1);
+                                tvFavoriteCount.setTextColor(context.getResources().getColor(R.color.medium_red));
+                                tvFavoriteCount.setText(String.valueOf(dialogTweet.favoriteCount));
                             } else {
                                 Toast.makeText(context, "Unfavorited", Toast.LENGTH_LONG).show();
+                                dialogTweet.setFavoriteCount(dialogTweet.favoriteCount - 1);
+                                tvFavoriteCount.setTextColor(context.getResources().getColor(R.color.twitter_blue_30));
+                                tvFavoriteCount.setText(String.valueOf(dialogTweet.favoriteCount));
                             }
 
                             changeColor(ibFavorite, dialogTweet.favorited, R.drawable.favorite_stroke, R.drawable.favorite);
