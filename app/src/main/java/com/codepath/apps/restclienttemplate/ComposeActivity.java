@@ -59,7 +59,7 @@ public class ComposeActivity extends AppCompatActivity {
             String userName = "@" + replyTo.user.screenName;
             message.setText(userName);
 
-            // Set userID for later
+            // Set tweetID for later
             statusID = replyTo.uid;
         }
 

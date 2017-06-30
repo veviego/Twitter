@@ -5,11 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
@@ -82,28 +87,99 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
                 .into(holder.ivProfileImage);
 
-        // load media using glide
-        Glide.with(context)
-                .load(tweet.entity.media_url)
-                .bitmapTransform(new RoundedCornersTransformation(context, 25, 0))
-                .into(holder.ivMedia);
+
+        if (!(tweet.entity.media_url == null)) {
+            // load media using glide
+            Glide.with(context)
+                    .load(tweet.entity.media_url)
+                    .bitmapTransform(new RoundedCornersTransformation(context, 25, 0))
+                    .into(holder.ivMedia);
+        }
 
         holder.ibReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create intent
-                Intent i = new Intent(context, ComposeActivity.class);
 
-                // Attach tweet to intent
-                i.putExtra("currentTweet", Parcels.wrap(tweet));
+                // Inflate the compose dialog
+                View composeView = LayoutInflater.from(context).inflate(R.layout.activity_compose, null);
+                // Create the Alert Dialog Builder
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                // Set the view that the alert dialog builder should create
+                alertDialogBuilder.setView(composeView);
+                final AlertDialog replyAlertDialog = alertDialogBuilder.create();
 
-                // Add request code to intent
-                i.putExtra("request_code", REP_REQUEST_CODE);
+                // Get EditText for tweet body and set listener
+                final EditText message = (EditText) composeView.findViewById(R.id.etMessageBox);
+                final TextView charCount = (TextView) composeView.findViewById(R.id.tvCharCount);
+                message.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                // Launch compose activity and expect a result
-                ((Activity) context).startActivityForResult(i, REP_REQUEST_CODE);
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        int available = 140 - message.getText().toString().length();
+                        String num = available + " / 140";
+                        charCount.setText(num);
+                    }
+                });
+
+                String userName = "@" + tweet.user.screenName;
+                message.setText(userName);
+
+                // Set userID for later
+                final long statusID = tweet.uid;
+
+
+                Button btTweetButton = (Button) composeView.findViewById(R.id.btTweetButton);
+                btTweetButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final String tweetBody = message.getText().toString();
+
+                        // Post a new tweet
+                        client.sendTweet(tweetBody, context.getString(R.string.reply_param_key), statusID, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                try {
+
+                                    Tweet posted = Tweet.fromJSON(response);
+
+                                    // Notify the adapter that a new tweet has been inserted and scroll to top
+                                    mTweets.add(0, posted);
+                                    notifyItemInserted(0);
+
+                                    RecyclerView temp = (RecyclerView) ((Activity) context).findViewById(R.id.rvTweet);
+                                    temp.scrollToPosition(0);
+
+                                    replyAlertDialog.cancel();
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                Log.d("Compose Message", errorResponse.toString());
+                            }
+                        });
+                    }
+                });
+
+
+                // Open the dialog and hide the progress bar
+                replyAlertDialog.show();
             }
         });
+
+
 
         // retweet and unretweet
         holder.ibReTweet.setOnClickListener(new View.OnClickListener() {
@@ -178,6 +254,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         });
 
     }
+
 
     @Override
     public int getItemCount() {
@@ -453,8 +530,6 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                     break;
             }
         }
-
-
         return relativeDate;
     }
 }

@@ -229,6 +229,7 @@ public class TimelineActivity extends AppCompatActivity {
         alertDialogBuilder.setView(composeView);
         composeAlertDialog = alertDialogBuilder.create();
 
+
         // Get EditText for tweet body and set listener
         message = (EditText) composeView.findViewById(R.id.etMessageBox);
         final TextView charCount = (TextView) composeView.findViewById(R.id.tvCharCount);
