@@ -8,21 +8,11 @@
     android:visibility="visible"
     tools:context="com.codepath.apps.restclienttemplate.ComposeActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:minHeight="?attr/actionBarSize"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:titleTextColor="@android:color/white"
-        android:background="@color/colorPrimary">
-    </android.support.v7.widget.Toolbar>
-
     <EditText
         android:id="@+id/etMessageBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/toolbar"
         android:ems="10"
         android:hint="Compose Message Here"
         android:inputType="textMultiLine"
@@ -35,8 +25,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/etMessageBox"
+        android:background="@color/twitter_blue_30"
         android:onClick="onSubmit"
-        android:text="Tweet" />
+        android:text="Tweet"
+        android:textColor="@android:color/white" />
 
     <Button
         android:id="@+id/btCancelButton"
@@ -44,8 +36,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/etMessageBox"
+        android:background="@color/twitter_blue_30"
         android:onClick="onCancel"
-        android:text="Cancel" />
+        android:text="Cancel"
+        android:textColor="@android:color/white" />
 
     <TextView
         android:id="@+id/tvCharCount"

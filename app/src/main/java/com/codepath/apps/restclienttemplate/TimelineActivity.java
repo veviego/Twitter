@@ -1,8 +1,6 @@
 package com.codepath.apps.restclienttemplate;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -27,7 +25,6 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -264,68 +261,43 @@ public class TimelineActivity extends AppCompatActivity {
         final String tweetBody = message.getText().toString();
         showProgressBar();
 
-        // Post a new tweet
-        client.sendTweet(tweetBody, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
+        if (tweetBody.length() > 0) {
+            // Post a new tweet
+            client.sendTweet(tweetBody, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
 
-                    Tweet posted = Tweet.fromJSON(response);
+                        Tweet posted = Tweet.fromJSON(response);
 
-                    // Notify the adapter that a new tweet has been inserted and scroll to top
-                    tweets.add(0, posted);
-                    tweetAdapter.notifyItemInserted(0);
-                    rvTweets.scrollToPosition(0);
+                        // Notify the adapter that a new tweet has been inserted and scroll to top
+                        tweets.add(0, posted);
+                        tweetAdapter.notifyItemInserted(0);
+                        rvTweets.scrollToPosition(0);
 
-                    hideProgressBar();
-                    composeAlertDialog.cancel();
+                        hideProgressBar();
+                        composeAlertDialog.cancel();
 
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("Compose Message", errorResponse.toString());
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Log.d("Compose Message", errorResponse.toString());
+                }
+            });
+        } else {
+            hideProgressBar();
+        }
     }
 
     public void onCancel(View view) {
         composeAlertDialog.cancel();
     }
 
-
-    // Handler for return of data
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // REQUEST_CODE is defined above
-        if (resultCode == RESULT_OK && (requestCode == NT_REQUEST_CODE || requestCode == tweetAdapter.getREP_REQUEST_CODE())) {
-            // Extract name value from result extras
-            String tweetBody = data.getExtras().getString("tweetBody");
-
-            // Add my latest tweet to my feed
-            Tweet recent = (Tweet) Parcels.unwrap(data.getParcelableExtra("justTweeted"));
-
-            // Notify the adapter that a new tweet has been inserted and scroll to top
-            tweets.add(0, recent);
-            tweetAdapter.notifyItemInserted(0);
-            rvTweets.scrollToPosition(0);
-        }
-    }
-
-    // Retweet from Timeline
-    protected void onReTweet() {
-        rvTweets.scrollToPosition(0);
-    }
-
-    void showTweetDialog() {
-        FragmentManager fm = getSupportFragmentManager();
-        TweetDialog tweetDialog = TweetDialog.newInstance("Some Title");
-        tweetDialog.show(fm, "fragment_edit_name");
-    }
 
 
 

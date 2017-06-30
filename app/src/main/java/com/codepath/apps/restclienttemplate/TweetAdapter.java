@@ -65,7 +65,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
     // bind values based on position of the element
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         // get data according to position
         final Tweet tweet = mTweets.get(position);
 
@@ -221,6 +221,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                         }
 
                         changeColor(holder.ibReTweet, tweet.retweeted, R.drawable.retweet_stroke, R.drawable.retweet);
+                        notifyItemChanged(position);
+
 
                         // Notify the adapter that a new tweet has been inserted and scroll to top
                         // mTweets.add(0, retweeted);
@@ -259,6 +261,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                         }
 
                         changeColor(holder.ibFavorite, tweet.favorited, R.drawable.favorite_stroke, R.drawable.favorite);
+                        notifyItemChanged(position);
+
 
                     }
 
@@ -514,6 +518,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                             }
 
                             changeColor(ibReTweet, dialogTweet.retweeted, R.drawable.retweet_stroke, R.drawable.retweet);
+                            notifyItemChanged(getAdapterPosition());
 
                         }
 
@@ -549,6 +554,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                             }
 
                             changeColor(ibFavorite, dialogTweet.favorited, R.drawable.favorite_stroke, R.drawable.favorite);
+                            notifyItemChanged(getAdapterPosition());
 
                         }
 
