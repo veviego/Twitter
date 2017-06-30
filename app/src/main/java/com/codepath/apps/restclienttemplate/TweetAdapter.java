@@ -615,6 +615,12 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                 case "minutes":
                     relativeDate = number + "m";
                     break;
+                case "hour":
+                    relativeDate = number + "h";
+                    break;
+                case "hours":
+                    relativeDate = number + "h";
+                    break;
                 case "day":
                     relativeDate = number + "d";
                     break;
