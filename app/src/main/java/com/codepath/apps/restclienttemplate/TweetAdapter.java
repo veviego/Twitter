@@ -65,7 +65,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
     // bind values based on position of the element
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         // get data according to position
         final Tweet tweet = mTweets.get(position);
 
@@ -94,6 +94,9 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                     .bitmapTransform(new RoundedCornersTransformation(context, 25, 0))
                     .into(holder.ivMedia);
         }
+
+        // Set button colors
+        changeColor(holder.ibReTweet, tweet.retweeted, R.drawable.retweet_stroke, R.drawable.retweet);
 
         holder.ibReply.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,7 +153,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                 });
 
                 // Reply retweet button
-                Button btTweetButton = (Button) composeView.findViewById(R.id.btTweetButton);
+                final Button btTweetButton = (Button) composeView.findViewById(R.id.btTweetButton);
                 btTweetButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -215,6 +218,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                         } else {
                             Toast.makeText(context, "Unretweeted", Toast.LENGTH_LONG).show();
                         }
+
+                        changeColor(holder.ibReTweet, tweet.retweeted, R.drawable.retweet_stroke, R.drawable.retweet);
 
                         // Notify the adapter that a new tweet has been inserted and scroll to top
                         // mTweets.add(0, retweeted);
@@ -332,7 +337,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             TextView tvBody;
             TextView tvTime;
             ImageButton ibReply;
-            ImageButton ibReTweet;
+            final ImageButton ibReTweet;
             ImageButton ibFavorite;
             ImageView ivMedia;
 
@@ -368,6 +373,9 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                     .load(dialogTweet.entity.media_url)
                     .bitmapTransform(new RoundedCornersTransformation(context, 25, 0))
                     .into(ivMedia);
+
+            // Set button colors
+            changeColor(ibReTweet, dialogTweet.retweeted, R.drawable.retweet_stroke, R.drawable.retweet);
 
 
             // Create an alert dialog builder
@@ -503,9 +511,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                                 Toast.makeText(context, "Unretweeted", Toast.LENGTH_LONG).show();
                             }
 
-                            // Notify the adapter that a new tweet has been inserted and scroll to top
-                            // mTweets.add(0, retweeted);
-                            // notifyItemInserted(0);
+                            changeColor(ibReTweet, dialogTweet.retweeted, R.drawable.retweet_stroke, R.drawable.retweet);
+
                         }
 
                         @Override
@@ -631,4 +638,13 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         }
         return relativeDate;
     }
+
+    public void changeColor(View v, boolean clicked, int id1, int id2) {
+        if (clicked) {
+            v.setBackgroundResource(id1);
+        } else {
+            v.setBackgroundResource(id2);
+        }
+    }
+
 }
