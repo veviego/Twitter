@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.codepath.apps.restclienttemplate.fragments.HomeTimelineFragment;
 import com.codepath.apps.restclienttemplate.fragments.TweetsPagerAdapter;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONException;
@@ -187,8 +188,28 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     public void onViewProfile(MenuItem mi) {
-        Intent i = new Intent(this, MyProfile.class);
-        startActivity(i);
+        final Intent i = new Intent(this, MyProfile.class);
+
+        client.getMyProfile(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                // Deserialize the user object
+                try {
+                    User user = User.fromJSON(response);
+                    i.putExtra("user_name", "@" + user.screenName);
+                    startActivity(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                startActivity(i);
+
+            }
+        });
     }
 
     public void onCancel(View view) {

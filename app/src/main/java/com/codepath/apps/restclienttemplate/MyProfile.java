@@ -6,13 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.codepath.apps.restclienttemplate.fragments.UserTimelineFragment;
-import com.codepath.apps.restclienttemplate.models.User;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by veviego on 7/3/17.
@@ -49,23 +42,7 @@ public class MyProfile extends AppCompatActivity {
         // Make sure the toolbar exists in the activity and is not null
         setSupportActionBar(toolbar);
 
-        client.getMyProfile(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                // Deserialize the user object
-                try {
-                    User user = User.fromJSON(response);
-                    getSupportActionBar().setTitle(user.screenName);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
-        });
+        getSupportActionBar().setTitle(getIntent().getStringExtra("user_name"));
 
     }
 }
