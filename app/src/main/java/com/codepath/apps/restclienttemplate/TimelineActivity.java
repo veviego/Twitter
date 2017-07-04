@@ -1,5 +1,6 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -183,6 +184,11 @@ public class TimelineActivity extends AppCompatActivity {
         } else {
             hideProgressBar();
         }
+    }
+
+    public void onViewProfile(MenuItem mi) {
+        Intent i = new Intent(this, MyProfile.class);
+        startActivity(i);
     }
 
     public void onCancel(View view) {

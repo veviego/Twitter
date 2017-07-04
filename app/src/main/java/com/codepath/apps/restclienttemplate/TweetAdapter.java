@@ -116,6 +116,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             holder.tvFavoriteCount.setTextColor(context.getResources().getColor(R.color.twitter_blue_30));
         }
 
+
         holder.ibReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
