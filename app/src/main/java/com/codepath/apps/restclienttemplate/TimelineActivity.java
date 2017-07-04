@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -46,9 +47,8 @@ public class TimelineActivity extends AppCompatActivity {
     EditText message;
     AlertDialog composeAlertDialog;
     HomeTimelineFragment homeTimelineFragment;
-
-
-    private boolean dialogOpen = false;
+    ViewPager vpPager;
+    TweetsPagerAdapter tpAdapter;
 
 
     @Override
@@ -59,9 +59,10 @@ public class TimelineActivity extends AppCompatActivity {
         client = TwitterApplication.getRestClient();
 
         // Get the ViewPager
-        ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
+        vpPager = (ViewPager) findViewById(R.id.viewpager);
         // Set the Pager Adapter
-        vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager(), this));
+        tpAdapter = new TweetsPagerAdapter(getSupportFragmentManager(), this);
+        vpPager.setAdapter(tpAdapter);
         // Set the TabLayout to use the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(vpPager);
@@ -72,99 +73,7 @@ public class TimelineActivity extends AppCompatActivity {
         // Sets the Toolbar to act as the ActionBar for this Activity window.
         // Make sure the toolbar exists in the activity and is not null
         setSupportActionBar(toolbar);
-
-        // Associate the fragment with the
-//        homeTimelineFragment = (HomeTimelineFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
-//        mentionsTimelineFragment = (MentionsTimelineFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
-
     }
-
-//    public void fetchTimelineAsync(int page) {
-//        // Send the network request to fetch the updated data
-//        // `client` here is an instance of Android Async HTTP
-//        // getHomeTimeline is an example endpoint.
-//
-//        client.getHomeTimeline(new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-//                // Remember to CLEAR OUT old items before appending in the new ones
-//                tweetAdapter.clear();
-//                // ...the data has come back, add new items to your adapter...
-//                // iterate through JSON array
-//                // for each entry, deserialize the JSON object
-//                for (int i = 0 ; i < response.length(); i++) {
-//                    try {
-//                        // convert each object to a tweet model
-//                        Tweet tweet = Tweet.fromJSON(response.getJSONObject(i));
-//
-//                        // add that tweet model to our data source
-//                        tweets.add(tweet);
-//
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                tweetAdapter.addAll(tweets);
-//
-//                // Now we call setRefreshing(false) to signal refresh has finished
-//                swipeContainer.setRefreshing(false);
-//            }
-//
-//            public void onFailure(Throwable e) {
-//                Log.d("DEBUG", "Fetch timeline error: " + e.toString());
-//            }
-//        });
-//    }
-
-
-//    private void populateTimeline() {
-//        client.getHomeTimeline(new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                Log.d("TwitterClient", response.toString());
-//            }
-//
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-//                // iterate through JSON array
-//                // for each entry, deserialize the JSON object
-//                for (int i = 0 ; i < response.length(); i++) {
-//                    try {
-//                        // convert each object to a tweet model
-//                        Tweet tweet = Tweet.fromJSON(response.getJSONObject(i));
-//
-//                        // add that tweet model to our data source
-//                        tweets.add(tweet);
-//
-//                        // notify the adapter that we've added an item
-//                        tweetAdapter.notifyItemInserted(tweets.size() - 1);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                Log.d("TwitterClient", errorResponse.toString());
-//                throwable.printStackTrace();
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-//                Log.d("TwitterClient", errorResponse.toString());
-//                throwable.printStackTrace();
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//                Log.d("TwitterClient", responseString);
-//                throwable.printStackTrace();
-//            }
-//        });
-//
-//    }
 
     // Menu icons are inflated just as they were with actionbar
     @Override
@@ -242,6 +151,8 @@ public class TimelineActivity extends AppCompatActivity {
         final String tweetBody = message.getText().toString();
         showProgressBar();
 
+        Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + vpPager.getCurrentItem());
+
         if (tweetBody.length() > 0) {
             // Post a new tweet
             client.sendTweet(tweetBody, new JsonHttpResponseHandler() {
@@ -253,9 +164,7 @@ public class TimelineActivity extends AppCompatActivity {
                         posted.entity.setMedia_url(null);
 
                         // Notify the adapter that a new tweet has been inserted and scroll to top
-                        homeTimelineFragment.tweets.add(0, posted);
-                        homeTimelineFragment.tweetAdapter.notifyItemInserted(0);
-                        homeTimelineFragment.rvTweets.scrollToPosition(0);
+                        tpAdapter.homeTimelineFragment.addTweet(posted);
 
                         hideProgressBar();
                         composeAlertDialog.cancel();

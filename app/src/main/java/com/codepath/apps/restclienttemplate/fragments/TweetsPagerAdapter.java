@@ -14,6 +14,8 @@ public class TweetsPagerAdapter extends FragmentPagerAdapter {
     private int NUMBER_OF_FRAGMENTS = 2;
     private String[] tabTitle = new String[] {"Home", "Mentions"};
     private Context context;
+    public HomeTimelineFragment homeTimelineFragment;
+    public MentionsTimelineFragment mentionsTimelineFragment;
 
     public TweetsPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
@@ -31,10 +33,12 @@ public class TweetsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new HomeTimelineFragment();
+                homeTimelineFragment = new HomeTimelineFragment();
+                return homeTimelineFragment;
 
             case 1:
-                return new MentionsTimelineFragment();
+                mentionsTimelineFragment = new MentionsTimelineFragment();
+                return mentionsTimelineFragment;
 
             default:
                 return null;

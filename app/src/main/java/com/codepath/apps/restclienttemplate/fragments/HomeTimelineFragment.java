@@ -96,7 +96,6 @@ public class HomeTimelineFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-
         return v;
     }
 
@@ -187,4 +186,9 @@ public class HomeTimelineFragment extends Fragment {
 
     }
 
+    public void addTweet(Tweet tweet) {
+        tweets.add(0, tweet);
+        tweetAdapter.notifyItemInserted(0);
+        rvTweets.scrollToPosition(0);
+    }
 }
