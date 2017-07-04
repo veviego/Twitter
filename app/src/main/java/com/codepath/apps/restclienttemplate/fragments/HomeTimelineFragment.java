@@ -5,10 +5,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -36,7 +34,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by veviego on 7/3/17.
  */
 
-public class TweetsListFragment extends Fragment {
+public class HomeTimelineFragment extends Fragment {
 
     private TwitterClient client;
     public TweetAdapter tweetAdapter;
@@ -49,6 +47,7 @@ public class TweetsListFragment extends Fragment {
     EditText message;
     AlertDialog composeAlertDialog;
 
+
     // Inflation happens in onCreateView
     @Nullable
     @Override
@@ -58,12 +57,6 @@ public class TweetsListFragment extends Fragment {
 
         client = TwitterApplication.getRestClient();
 
-
-        // Find the toolbar view inside the activity layout
-        Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
-        // Sets the Toolbar to act as the ActionBar for this Activity window.
-        // Make sure the toolbar exists in the activity and is not null
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
         // find the RecyclerView
         rvTweets = (RecyclerView) v.findViewById(R.id.rvTweet);
@@ -193,26 +186,5 @@ public class TweetsListFragment extends Fragment {
         });
 
     }
-
-    public void showProgressBar() {
-        // Show progress item
-        miActionProgressItem.setVisible(true);
-    }
-
-    public void hideProgressBar() {
-        // Hide progress item
-        miActionProgressItem.setVisible(false);
-    }
-
-
-
-
-    public void onCancel(View view) {
-        composeAlertDialog.cancel();
-    }
-
-
-
-
 
 }

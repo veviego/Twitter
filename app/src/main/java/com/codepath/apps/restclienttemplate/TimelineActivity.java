@@ -1,7 +1,9 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +20,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.codepath.apps.restclienttemplate.fragments.TweetsListFragment;
+import com.codepath.apps.restclienttemplate.fragments.HomeTimelineFragment;
+import com.codepath.apps.restclienttemplate.fragments.TweetsPagerAdapter;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -42,7 +45,8 @@ public class TimelineActivity extends AppCompatActivity {
     MenuItem miActionProgressItem;
     EditText message;
     AlertDialog composeAlertDialog;
-    TweetsListFragment tweetsListFragment;
+    HomeTimelineFragment homeTimelineFragment;
+
 
     private boolean dialogOpen = false;
 
@@ -52,54 +56,27 @@ public class TimelineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
+        client = TwitterApplication.getRestClient();
+
+        // Get the ViewPager
+        ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
+        // Set the Pager Adapter
+        vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager(), this));
+        // Set the TabLayout to use the ViewPager
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(vpPager);
+
+
         // Find the toolbar view inside the activity layout
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         // Sets the Toolbar to act as the ActionBar for this Activity window.
         // Make sure the toolbar exists in the activity and is not null
         setSupportActionBar(toolbar);
 
-        client = TwitterApplication.getRestClient();
-
         // Associate the fragment with the
-        tweetsListFragment = (TweetsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
+//        homeTimelineFragment = (HomeTimelineFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
+//        mentionsTimelineFragment = (MentionsTimelineFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
 
-//        // find the RecyclerView
-//        rvTweets = (RecyclerView) findViewById(R.id.rvTweet);
-//        rvTweets.addItemDecoration(new DividerItemDecoration(this));
-//
-//
-//        // init the ArrayList (data source)
-//        tweets = new ArrayList<Tweet>();
-//
-//        // construct the adapter from this data source
-//        tweetAdapter = new TweetAdapter(tweets);
-//
-//        // RecyclerView setup (layout manager, use adapter)
-//        rvTweets.setLayoutManager(new LinearLayoutManager(this));
-//        rvTweets.setAdapter(tweetAdapter);
-//
-//        populateTimeline();
-//
-//
-//        // Lookup the swipe container view
-//        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
-//
-//        // Setup refresh listener which triggers new data loading
-//        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                // Your code to refresh the list here.
-//                // Make sure you call swipeContainer.setRefreshing(false)
-//                // once the network request has completed successfully.
-//                fetchTimelineAsync(0);
-//            }
-//        });
-//
-//        // Configure the refreshing colors
-//        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-//                android.R.color.holo_green_light,
-//                android.R.color.holo_orange_light,
-//                android.R.color.holo_red_light);
     }
 
 //    public void fetchTimelineAsync(int page) {
@@ -258,6 +235,9 @@ public class TimelineActivity extends AppCompatActivity {
         hideProgressBar();
     }
 
+    // idea, make onsubmit just call a helper which would then do fragment.tweets.add ...
+
+
     public void onSubmit(View v) {
         final String tweetBody = message.getText().toString();
         showProgressBar();
@@ -273,9 +253,9 @@ public class TimelineActivity extends AppCompatActivity {
                         posted.entity.setMedia_url(null);
 
                         // Notify the adapter that a new tweet has been inserted and scroll to top
-                        tweetsListFragment.tweets.add(0, posted);
-                        tweetsListFragment.tweetAdapter.notifyItemInserted(0);
-                        tweetsListFragment.rvTweets.scrollToPosition(0);
+                        homeTimelineFragment.tweets.add(0, posted);
+                        homeTimelineFragment.tweetAdapter.notifyItemInserted(0);
+                        homeTimelineFragment.rvTweets.scrollToPosition(0);
 
                         hideProgressBar();
                         composeAlertDialog.cancel();
@@ -299,8 +279,4 @@ public class TimelineActivity extends AppCompatActivity {
     public void onCancel(View view) {
         composeAlertDialog.cancel();
     }
-
-
-
-
 }

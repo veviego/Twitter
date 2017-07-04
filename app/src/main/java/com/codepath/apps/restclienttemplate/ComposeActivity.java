@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -44,11 +43,11 @@ public class ComposeActivity extends AppCompatActivity {
 
         client = TwitterApplication.getRestClient();
 
-        // Find the toolbar view inside the activity layout
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        // Sets the Toolbar to act as the ActionBar for this Activity window.
-        // Make sure the toolbar exists in the activity and is not null
-        setSupportActionBar(toolbar);
+//        // Find the toolbar view inside the activity layout
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        // Sets the Toolbar to act as the ActionBar for this Activity window.
+//        // Make sure the toolbar exists in the activity and is not null
+//        setSupportActionBar(toolbar);
 
         miActionProgressItem = (MenuItem) findViewById(R.id.miActionProgress);
 
