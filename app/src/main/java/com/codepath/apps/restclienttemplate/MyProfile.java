@@ -157,8 +157,7 @@ public class MyProfile extends AppCompatActivity {
 
         // Load profile and background images using glide
         Glide.with(this)
-                .load(profile.backgroundUrl)
-                .bitmapTransform(new RoundedCornersTransformation(this, 25, 0))
+                .load(profile.backgroundUrl + "/600x200")
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {

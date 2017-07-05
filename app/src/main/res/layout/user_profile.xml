@@ -25,6 +25,7 @@
             android:layout_height="100dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:scaleType="fitXY"
             app:srcCompat="@color/colorPrimary"
             />
 
@@ -64,6 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/rlUserHeader"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
