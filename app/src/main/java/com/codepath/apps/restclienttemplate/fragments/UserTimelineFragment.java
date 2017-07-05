@@ -73,7 +73,8 @@ public class UserTimelineFragment extends Fragment {
         rvTweets.setLayoutManager(new LinearLayoutManager(getContext()));
         rvTweets.setAdapter(tweetAdapter);
 
-        populateTimeline();
+
+        screenName = getArguments().getString("screen_name");
 
 
         // Lookup the swipe container view
@@ -96,7 +97,8 @@ public class UserTimelineFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        screenName = getArguments().getString("screen_name");
+        populateTimeline();
+
 
         return v;
     }

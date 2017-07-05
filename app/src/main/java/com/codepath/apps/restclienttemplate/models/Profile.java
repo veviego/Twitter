@@ -20,7 +20,7 @@ public class Profile {
     public String name;
     public String screenName;
 
-    // empty constructor needed for pareceler
+    // empty constructor needed for parceler
     public Profile() {}
 
     // Deserialize JSON
@@ -28,7 +28,7 @@ public class Profile {
         Profile profile = new Profile();
 
         // Extract values from JSON
-        profile.backgroundUrl = jsonObject.getString("profile_background_image_url");
+        profile.backgroundUrl = jsonObject.getString("profile_banner_url");
         profile.profileImageUrl = jsonObject.getString("profile_image_url");
         profile.tagline = jsonObject.getString("description");
         profile.followingCount = jsonObject.getLong("friends_count");

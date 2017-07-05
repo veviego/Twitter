@@ -2,13 +2,22 @@ package com.codepath.apps.restclienttemplate;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.codepath.apps.restclienttemplate.fragments.UserTimelineFragment;
 import com.codepath.apps.restclienttemplate.models.Profile;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -24,7 +33,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
  */
 
 public class MyProfile extends AppCompatActivity {
-    // Constans and public variables
+    // Constants and public variables
     TwitterClient client;
     ImageView ivProfileBanner;
     ImageView ivDetailProfileImage;
@@ -34,6 +43,8 @@ public class MyProfile extends AppCompatActivity {
     TextView tvFollowing;
     String userName;
     String userID;
+    RelativeLayout rlUserHeader;
+    MenuItem miActionProgressItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +58,17 @@ public class MyProfile extends AppCompatActivity {
         tvTagline = (TextView) findViewById(R.id.tvTagline);
         tvFollowers = (TextView) findViewById(R.id.tvFollowers);
         tvFollowing = (TextView) findViewById(R.id.tvFollowing);
+        rlUserHeader = (RelativeLayout) findViewById(R.id.rlUserHeader);
+        miActionProgressItem = (MenuItem) findViewById(R.id.miActionProgress);
 
 
         // Set up an instance of the client
         client = TwitterApplication.getRestClient();
 
-        String screenName = getIntent().getStringExtra("screen_name");
-
         // Create the user fragment
-        UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(screenName);
+        userName = getIntent().getStringExtra("userName");
+        userID = getIntent().getStringExtra("userID");
+        UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(userName);
 
         // Display the user timeline fragment inside the container (dynamically)
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -72,10 +85,6 @@ public class MyProfile extends AppCompatActivity {
         // Make sure the toolbar exists in the activity and is not null
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setTitle(getIntent().getStringExtra("user_name"));
-
-        userName = getIntent().getStringExtra("userName");
-        userID = getIntent().getStringExtra("userID");
 
         if (userName != null && userID != null) {
             client.getProfile(userName, userID, new JsonHttpResponseHandler() {
@@ -104,6 +113,8 @@ public class MyProfile extends AppCompatActivity {
                     try {
                         Profile profile = Profile.fromJSON(response);
 
+                        userName = profile.screenName;
+
                         // Populate the user headline
                         populateUserHeadline(profile);
 
@@ -126,16 +137,79 @@ public class MyProfile extends AppCompatActivity {
         tvFollowers.setText(String.valueOf(profile.followerCount) + " Followers");
         tvFollowing.setText(String.valueOf(profile.followingCount) + " Following");
 
+        getSupportActionBar().setTitle("@" + userName);
+
+        Log.i("Banner URL", profile.backgroundUrl + "<--");
+
+
+//        // TODO If there is no banner, move the profile image up
+//        if (profile.backgroundUrl.equals("")) {
+//            ivProfileBanner.setVisibility(View.GONE);
+//
+//        } else {
+//            // Load profile and background images using glide
+//            Glide.with(this)
+//                    .load(profile.backgroundUrl)
+//                    .bitmapTransform(new RoundedCornersTransformation(this, 25, 0))
+//                    .into(ivProfileBanner);
+//        }
+
+
         // Load profile and background images using glide
         Glide.with(this)
                 .load(profile.backgroundUrl)
                 .bitmapTransform(new RoundedCornersTransformation(this, 25, 0))
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        ivProfileBanner.setVisibility(View.GONE);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        return false;
+                    }
+                })
                 .into(ivProfileBanner);
+
 
         Glide.with(this)
                 .load(profile.profileImageUrl)
                 .bitmapTransform(new RoundedCornersTransformation(this, 25, 0))
                 .into(ivDetailProfileImage);
 
+    }
+
+    public void onHome(MenuItem mi) {
+        finish();
+    }
+
+    // Menu icons are inflated just as they were with actionbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_profile, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Store instance of the menu item containing progress
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        // Extract the action-view from the menu item
+        ProgressBar v =  (ProgressBar) MenuItemCompat.getActionView(miActionProgressItem);
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    public void showProgressBar() {
+        // Show progress item
+        miActionProgressItem.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        miActionProgressItem.setVisible(false);
     }
 }

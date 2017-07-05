@@ -20,23 +20,25 @@
         android:layout_alignParentStart="true">
 
         <ImageView
-        android:id="@+id/ivProfileBanner"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        app:srcCompat="@color/colorPrimary" />
+            android:id="@+id/ivProfileBanner"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            app:srcCompat="@color/colorPrimary"
+            />
 
         <ImageView
-        android:id="@+id/ivDetailProfileImage"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/ivProfileBanner"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+            android:id="@+id/ivDetailProfileImage"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_below="@+id/ivProfileBanner"
+            android:layout_alignParentStart="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
-        app:srcCompat="@drawable/profile" />
+            app:srcCompat="@drawable/profile" />
 
         <TextView
             android:id="@+id/tvName"
