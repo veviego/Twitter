@@ -143,6 +143,15 @@ public class TwitterClient extends OAuthBaseClient {
 		client.get(apiUrl, null, handler);
 	}
 
+	// Get other profile information
+	public void getProfile(String userName, String userID, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("users/show.json");
+		RequestParams params = new RequestParams();
+		params.put("user_id", userID);
+		params.put("screen_name", userName);
+		client.get(apiUrl, params, handler);
+	}
+
 
 
 

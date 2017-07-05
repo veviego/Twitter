@@ -32,6 +32,8 @@ public class MyProfile extends AppCompatActivity {
     TextView tvTagline;
     TextView tvFollowers;
     TextView tvFollowing;
+    String userName;
+    String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,25 +74,50 @@ public class MyProfile extends AppCompatActivity {
 
         getSupportActionBar().setTitle(getIntent().getStringExtra("user_name"));
 
-        client.getMyProfile(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
-                    Profile profile = Profile.fromJSON(response);
+        userName = getIntent().getStringExtra("userName");
+        userID = getIntent().getStringExtra("userID");
 
-                    // Populate the user headline
-                    populateUserHeadline(profile);
+        if (userName != null && userID != null) {
+            client.getProfile(userName, userID, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
+                        Profile profile = Profile.fromJSON(response);
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                        // Populate the user headline
+                        populateUserHeadline(profile);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.e("MyProfile", errorResponse.toString());
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Log.e("MyProfile", errorResponse.toString());
+                }
+            });
+        } else {
+            client.getMyProfile(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
+                        Profile profile = Profile.fromJSON(response);
+
+                        // Populate the user headline
+                        populateUserHeadline(profile);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Log.e("MyProfile", errorResponse.toString());
+                }
+            });
+        }
     }
 
     public void populateUserHeadline(Profile profile) {

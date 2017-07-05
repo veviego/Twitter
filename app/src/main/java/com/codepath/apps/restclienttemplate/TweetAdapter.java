@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -116,6 +117,17 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             holder.tvFavoriteCount.setTextColor(context.getResources().getColor(R.color.twitter_blue_30));
         }
 
+
+        // Set listener for other users' profile images
+        holder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, MyProfile.class);
+                i.putExtra("userName", tweet.user.screenName);
+                i.putExtra("userID", String.valueOf(tweet.user.uid));
+                ((Activity) context).startActivity(i);
+            }
+        });
 
         holder.ibReply.setOnClickListener(new View.OnClickListener() {
             @Override
