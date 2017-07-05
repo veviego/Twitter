@@ -17,6 +17,8 @@ public class Profile {
     public String tagline;
     public long followingCount;
     public long followerCount;
+    public String name;
+    public String screenName;
 
     // empty constructor needed for pareceler
     public Profile() {}
@@ -31,6 +33,9 @@ public class Profile {
         profile.tagline = jsonObject.getString("description");
         profile.followingCount = jsonObject.getLong("friends_count");
         profile.followerCount = jsonObject.getLong("followers_count");
+        profile.name = jsonObject.getString("name");
+        profile.screenName = jsonObject.getString("screen_name");
+
 
         return profile;
     }

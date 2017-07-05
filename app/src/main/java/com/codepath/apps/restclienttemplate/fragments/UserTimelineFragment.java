@@ -60,7 +60,7 @@ public class UserTimelineFragment extends Fragment {
 
         // find the RecyclerView
         rvTweets = (RecyclerView) v.findViewById(R.id.rvTweet);
-//        rvTweets.addItemDecoration(new DividerItemDecoration(getContext()));
+        rvTweets.addItemDecoration(new com.codepath.apps.restclienttemplate.DividerItemDecoration(getContext()));
 
 
         // init the ArrayList (data source)
