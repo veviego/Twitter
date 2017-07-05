@@ -67,6 +67,8 @@ public class TimelineActivity extends AppCompatActivity {
         vpPager.setAdapter(tpAdapter);
         // Set the TabLayout to use the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setBackgroundColor(getResources().getColor(R.color.twitter_blue_30));
+        tabLayout.setTabTextColors(getResources().getColor(R.color.white), getResources().getColor(R.color.white));
         tabLayout.setupWithViewPager(vpPager);
 
 
