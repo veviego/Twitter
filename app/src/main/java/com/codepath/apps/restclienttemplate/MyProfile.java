@@ -140,6 +140,7 @@ public class MyProfile extends AppCompatActivity {
         getSupportActionBar().setTitle("@" + userName);
 
 
+        showProgressBar();
 
         // Load profile and background images using glide
         if (profile.backgroundUrl != null) {
@@ -168,6 +169,7 @@ public class MyProfile extends AppCompatActivity {
                 .bitmapTransform(new RoundedCornersTransformation(this, 25, 0))
                 .into(ivDetailProfileImage);
 
+        hideProgressBar();
     }
 
     public void onHome(MenuItem mi) {
