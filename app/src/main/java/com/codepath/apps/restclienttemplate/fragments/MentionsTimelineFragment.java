@@ -4,15 +4,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.codepath.apps.restclienttemplate.DividerItemDecoration;
 import com.codepath.apps.restclienttemplate.R;
@@ -41,12 +38,6 @@ public class MentionsTimelineFragment extends Fragment {
     public ArrayList<Tweet> tweets;
     public RecyclerView rvTweets;
     public SwipeRefreshLayout swipeContainer;
-    public View v;
-
-    MenuItem miActionProgressItem;
-    EditText message;
-    AlertDialog composeAlertDialog;
-
 
     // Inflation happens in onCreateView
     @Nullable
@@ -57,12 +48,6 @@ public class MentionsTimelineFragment extends Fragment {
 
         client = TwitterApplication.getRestClient();
 
-
-//        // Find the toolbar view inside the activity layout
-//        Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
-//        // Sets the Toolbar to act as the ActionBar for this Activity window.
-//        // Make sure the toolbar exists in the activity and is not null
-//        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
         // find the RecyclerView
         rvTweets = (RecyclerView) v.findViewById(R.id.rvTweet);
@@ -78,8 +63,6 @@ public class MentionsTimelineFragment extends Fragment {
         // RecyclerView setup (layout manager, use adapter)
         rvTweets.setLayoutManager(new LinearLayoutManager(getContext()));
         rvTweets.setAdapter(tweetAdapter);
-
-        populateTimeline();
 
 
         // Lookup the swipe container view
@@ -102,6 +85,7 @@ public class MentionsTimelineFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
+        populateTimeline();
 
         return v;
     }

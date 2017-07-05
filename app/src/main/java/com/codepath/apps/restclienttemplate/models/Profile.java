@@ -28,7 +28,14 @@ public class Profile {
         Profile profile = new Profile();
 
         // Extract values from JSON
-        profile.backgroundUrl = jsonObject.getString("profile_banner_url");
+        try {
+
+            profile.backgroundUrl = jsonObject.getString("profile_banner_url");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         profile.profileImageUrl = jsonObject.getString("profile_image_url");
         profile.tagline = jsonObject.getString("description");
         profile.followingCount = jsonObject.getLong("friends_count");

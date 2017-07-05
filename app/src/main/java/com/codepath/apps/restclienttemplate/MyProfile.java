@@ -139,38 +139,28 @@ public class MyProfile extends AppCompatActivity {
 
         getSupportActionBar().setTitle("@" + userName);
 
-        Log.i("Banner URL", profile.backgroundUrl + "<--");
-
-
-//        // TODO If there is no banner, move the profile image up
-//        if (profile.backgroundUrl.equals("")) {
-//            ivProfileBanner.setVisibility(View.GONE);
-//
-//        } else {
-//            // Load profile and background images using glide
-//            Glide.with(this)
-//                    .load(profile.backgroundUrl)
-//                    .bitmapTransform(new RoundedCornersTransformation(this, 25, 0))
-//                    .into(ivProfileBanner);
-//        }
 
 
         // Load profile and background images using glide
-        Glide.with(this)
-                .load(profile.backgroundUrl + "/600x200")
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        ivProfileBanner.setVisibility(View.GONE);
-                        return false;
-                    }
+        if (profile.backgroundUrl != null) {
+            Glide.with(this)
+                    .load(profile.backgroundUrl + "/600x200")
+                    .listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            ivProfileBanner.setVisibility(View.GONE);
+                            return false;
+                        }
 
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        return false;
-                    }
-                })
-                .into(ivProfileBanner);
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            return false;
+                        }
+                    })
+                    .into(ivProfileBanner);
+        } else {
+            ivProfileBanner.setVisibility(View.GONE);
+        }
 
 
         Glide.with(this)
