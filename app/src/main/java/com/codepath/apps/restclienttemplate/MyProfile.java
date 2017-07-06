@@ -2,7 +2,6 @@ package com.codepath.apps.restclienttemplate;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +20,6 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.codepath.apps.restclienttemplate.fragments.PeoplePagerAdapter;
-import com.codepath.apps.restclienttemplate.fragments.UserTimelineFragment;
 import com.codepath.apps.restclienttemplate.models.Profile;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -75,12 +73,12 @@ public class MyProfile extends AppCompatActivity {
         userID = getIntent().getStringExtra("userID");
 
         // Get the ViewPager
-        vpPager = (ViewPager) findViewById(R.id.viewpager);
+        vpPager = (ViewPager) findViewById(R.id.Profileviewpager);
         // Set the Pager Adapter
         ppAdapter = new PeoplePagerAdapter(getSupportFragmentManager(), this, userName);
         vpPager.setAdapter(ppAdapter);
         // Set the TabLayout to use the ViewPager
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.Profilesliding_tabs);
         tabLayout.setBackgroundColor(getResources().getColor(R.color.twitter_blue_30));
         tabLayout.setTabTextColors(getResources().getColor(R.color.white), getResources().getColor(R.color.white));
         tabLayout.setupWithViewPager(vpPager);
@@ -88,19 +86,16 @@ public class MyProfile extends AppCompatActivity {
 
 
 
-
-
-
-        UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(userName);
-
-        // Display the user timeline fragment inside the container (dynamically)
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-
-        // Make changes
-        ft.replace(R.id.flContainer, userTimelineFragment);
-
-        // Commit
-        ft.commit();
+//        UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(userName);
+//
+//        // Display the user timeline fragment inside the container (dynamically)
+//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//
+//        // Make changes
+//        ft.replace(R.id.flContainer, userTimelineFragment);
+//
+//        // Commit
+//        ft.commit();
 
         // Find the toolbar view inside the activity layout
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

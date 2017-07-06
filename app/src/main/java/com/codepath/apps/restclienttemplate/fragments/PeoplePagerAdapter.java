@@ -13,12 +13,13 @@ public class PeoplePagerAdapter extends FragmentPagerAdapter {
 
     // TODO create fragments and add them in
 
-    private int NUMBER_OF_FRAGMENTS = 2; // change to 3
+    private int NUMBER_OF_FRAGMENTS = 3;
     private String[] tabTitle = new String[] {"Tweets", "Followers", "Following"};
     private Context context;
     public String userName;
     public UserTimelineFragment userTimelineFragment;
     public FollowersFragment followersFragment;
+    public FollowingFragment followingFragment;
 
     public PeoplePagerAdapter(FragmentManager fm, Context context, String userName) {
         super(fm);
@@ -43,6 +44,10 @@ public class PeoplePagerAdapter extends FragmentPagerAdapter {
             case 1:
                 followersFragment = FollowersFragment.newInstance(userName);
                 return followersFragment;
+
+            case 2:
+                followingFragment = FollowingFragment.newInstance(userName);
+                return followingFragment;
 
             default:
                 return null;

@@ -30,7 +30,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by veviego on 7/5/17.
  */
 
-public class FollowersFragment extends Fragment {
+public class FollowingFragment extends Fragment {
 
     private TwitterClient client;
     public ArrayList<User> users;
@@ -40,12 +40,12 @@ public class FollowersFragment extends Fragment {
     String screenName;
     String userID;
 
-    public static FollowersFragment newInstance(String screenName) {
-        FollowersFragment followersFragment = new FollowersFragment();
+    public static FollowingFragment newInstance(String screenName) {
+        FollowingFragment followingFragment = new FollowingFragment();
         Bundle args = new Bundle();
         args.putString("screen_name", screenName);
-        followersFragment.setArguments(args);
-        return followersFragment;
+        followingFragment.setArguments(args);
+        return followingFragment;
     }
 
 
@@ -85,7 +85,7 @@ public class FollowersFragment extends Fragment {
                 // Your code to refresh the list here.
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
-                fetchFollowersAsync(0);
+                fetchFollowingAsync(0);
             }
         });
 
@@ -95,19 +95,19 @@ public class FollowersFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        populateFollowers();
+        populateFollowing();
 
 
         return v;
     }
 
 
-    public void fetchFollowersAsync(int page) {
+    public void fetchFollowingAsync(int page) {
         // Send the network request to fetch the updated data
         // `client` here is an instance of Android Async HTTP
         // getHomeTimeline is an example endpoint.
 
-        client.getFollowers(screenName, new JsonHttpResponseHandler() {
+        client.getFollowing(screenName, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 // Remember to CLEAR OUT old items before appending in the new ones
@@ -147,8 +147,8 @@ public class FollowersFragment extends Fragment {
     }
 
 
-    private void populateFollowers() {
-        client.getFollowers(screenName, new JsonHttpResponseHandler() {
+    private void populateFollowing() {
+        client.getFollowing(screenName, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
