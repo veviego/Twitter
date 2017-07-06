@@ -61,15 +61,15 @@ public class TweetDialog extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         // perform findViewByID lookups from view
-        ivProfileImage = (ImageView) view.findViewById(R.id.ivProfileImage);
-        tvUserName = (TextView) view.findViewById(R.id.tvUserName);
-        tvName = (TextView) view.findViewById(R.id.tvName);
-        tvBody = (TextView) view.findViewById(R.id.tvBody);
+        ivProfileImage = (ImageView) view.findViewById(R.id.ivUserProfileImage);
+        tvUserName = (TextView) view.findViewById(R.id.tvUserScreenName);
+        tvName = (TextView) view.findViewById(R.id.tvUserName);
+        tvBody = (TextView) view.findViewById(R.id.tvUserTagline);
         tvTime = (TextView) view.findViewById(R.id.tvTime);
         ibReply = (ImageButton) view.findViewById(R.id.ibReply);
         ibReTweet = (ImageButton) view.findViewById(R.id.ibReTweet);
         ibFavorite = (ImageButton) view.findViewById(R.id.ibFavorite);
-        ivMedia = (ImageView) view.findViewById(R.id.ivMedia);
+        ivMedia = (ImageView) view.findViewById(R.id.ivUserMedia);
 
 
 

@@ -1,8 +1,10 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.codepath.apps.restclienttemplate.fragments.PeoplePagerAdapter;
 import com.codepath.apps.restclienttemplate.fragments.UserTimelineFragment;
 import com.codepath.apps.restclienttemplate.models.Profile;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -54,12 +57,14 @@ public class MyProfile extends AppCompatActivity {
         // Attach layout elements to variables
         ivProfileBanner = (ImageView) findViewById(R.id.ivProfileBanner);
         ivDetailProfileImage = (ImageView) findViewById(R.id.ivDetailProfileImage);
-        tvName = (TextView) findViewById(R.id.tvName);
-        tvTagline = (TextView) findViewById(R.id.tvTagline);
+        tvName = (TextView) findViewById(R.id.tvUserName);
+        tvTagline = (TextView) findViewById(R.id.tvUserTagline);
         tvFollowers = (TextView) findViewById(R.id.tvFollowers);
         tvFollowing = (TextView) findViewById(R.id.tvFollowing);
         rlUserHeader = (RelativeLayout) findViewById(R.id.rlUserHeader);
         miActionProgressItem = (MenuItem) findViewById(R.id.miActionProgress);
+        ViewPager vpPager;
+        PeoplePagerAdapter ppAdapter;
 
 
         // Set up an instance of the client
@@ -68,6 +73,24 @@ public class MyProfile extends AppCompatActivity {
         // Create the user fragment
         userName = getIntent().getStringExtra("userName");
         userID = getIntent().getStringExtra("userID");
+
+        // Get the ViewPager
+        vpPager = (ViewPager) findViewById(R.id.viewpager);
+        // Set the Pager Adapter
+        ppAdapter = new PeoplePagerAdapter(getSupportFragmentManager(), this, userName);
+        vpPager.setAdapter(ppAdapter);
+        // Set the TabLayout to use the ViewPager
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setBackgroundColor(getResources().getColor(R.color.twitter_blue_30));
+        tabLayout.setTabTextColors(getResources().getColor(R.color.white), getResources().getColor(R.color.white));
+        tabLayout.setupWithViewPager(vpPager);
+
+
+
+
+
+
+
         UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(userName);
 
         // Display the user timeline fragment inside the container (dynamically)

@@ -37,7 +37,6 @@ public class UserTimelineFragment extends Fragment {
     public ArrayList<Tweet> tweets;
     public RecyclerView rvTweets;
     public SwipeRefreshLayout swipeContainer;
-    public View v;
 
     String screenName;
 

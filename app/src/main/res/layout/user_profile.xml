@@ -42,7 +42,7 @@
             app:srcCompat="@drawable/profile" />
 
         <TextView
-            android:id="@+id/tvName"
+            android:id="@+id/tvUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/ivDetailProfileImage"
@@ -52,11 +52,11 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvTagline"
+            android:id="@+id/tvUserTagline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@id/tvName"
-            android:layout_below="@id/tvName"
+            android:layout_alignStart="@id/tvUserName"
+            android:layout_below="@id/tvUserName"
             android:text="TagLine"
             android:textSize="12sp" />
     </RelativeLayout>

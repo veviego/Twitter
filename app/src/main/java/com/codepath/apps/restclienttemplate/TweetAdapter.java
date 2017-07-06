@@ -340,15 +340,15 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             final Context cxt = itemView.getContext();
 
             // perform findViewByID lookups
-            ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
-            tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
-            tvName = (TextView) itemView.findViewById(R.id.tvName);
-            tvBody = (TextView) itemView.findViewById(R.id.tvBody);
+            ivProfileImage = (ImageView) itemView.findViewById(R.id.ivUserProfileImage);
+            tvUserName = (TextView) itemView.findViewById(R.id.tvUserScreenName);
+            tvName = (TextView) itemView.findViewById(R.id.tvUserName);
+            tvBody = (TextView) itemView.findViewById(R.id.tvUserTagline);
             tvTime = (TextView) itemView.findViewById(R.id.tvTime);
             ibReply = (ImageButton) itemView.findViewById(R.id.ibReply);
             ibReTweet = (ImageButton) itemView.findViewById(R.id.ibReTweet);
             ibFavorite = (ImageButton) itemView.findViewById(R.id.ibFavorite);
-            ivMedia = (ImageView) itemView.findViewById(R.id.ivMedia);
+            ivMedia = (ImageView) itemView.findViewById(R.id.ivUserMedia);
             tvFavoriteCount = (TextView) itemView.findViewById(R.id.tvFavoriteCount);
             tvRetweetCount = (TextView) itemView.findViewById(R.id.tvRetweetCount);
 
@@ -390,15 +390,15 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             final TextView tvRetweetCount;
 
             // perform findViewByID lookups
-            ivProfileImage = (ImageView) tweetDetails.findViewById(R.id.ivProfileImage);
-            tvUserName = (TextView) tweetDetails.findViewById(R.id.tvUserName);
-            tvName = (TextView) tweetDetails.findViewById(R.id.tvName);
-            tvBody = (TextView) tweetDetails.findViewById(R.id.tvBody);
+            ivProfileImage = (ImageView) tweetDetails.findViewById(R.id.ivUserProfileImage);
+            tvUserName = (TextView) tweetDetails.findViewById(R.id.tvUserScreenName);
+            tvName = (TextView) tweetDetails.findViewById(R.id.tvUserName);
+            tvBody = (TextView) tweetDetails.findViewById(R.id.tvUserTagline);
             tvTime = (TextView) tweetDetails.findViewById(R.id.tvTime);
             ibReply = (ImageButton) tweetDetails.findViewById(R.id.ibReply);
             ibReTweet = (ImageButton) tweetDetails.findViewById(R.id.ibReTweet);
             ibFavorite = (ImageButton) tweetDetails.findViewById(R.id.ibFavorite);
-            ivMedia = (ImageView) tweetDetails.findViewById(R.id.ivMedia);
+            ivMedia = (ImageView) tweetDetails.findViewById(R.id.ivUserMedia);
             tvFavoriteCount = (TextView) tweetDetails.findViewById(R.id.tvFavoriteCount);
             tvRetweetCount = (TextView) tweetDetails.findViewById(R.id.tvRetweetCount);
 
