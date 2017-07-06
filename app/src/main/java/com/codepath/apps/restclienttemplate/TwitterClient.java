@@ -168,6 +168,12 @@ public class TwitterClient extends OAuthBaseClient {
 		client.get(apiUrl, params, handler);
 	}
 
+	// Delete a post
+	public void deletePost(long tweetID, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/destroy/" +tweetID + ".json");
+		client.post(apiUrl, null, handler);
+	}
+
 
 
 

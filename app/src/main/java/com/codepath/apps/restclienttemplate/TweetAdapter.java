@@ -352,8 +352,42 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvFavoriteCount = (TextView) itemView.findViewById(R.id.tvFavoriteCount);
             tvRetweetCount = (TextView) itemView.findViewById(R.id.tvRetweetCount);
 
-            // Set the onclick listener for the recycler
-            itemView.setOnClickListener(this);
+
+            // Set the long click listener for deleting personal tweets
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Toast.makeText(context, "hi", Toast.LENGTH_LONG).show();
+                    // get item position
+                    final int position = getAdapterPosition();
+                    // make sure the position is valid, i.e. actually exists in the view
+                    if (position != RecyclerView.NO_POSITION) {
+                        // get the movie at the position, this won't work if the class is static
+                        Tweet tweet = mTweets.get(position);
+
+                        // Delete tweet if I'm the author
+                        if (tweet.user.screenName.equals(context.getResources().getString(R.string.my_screen_name))) {
+                            client.deletePost(tweet.uid, new JsonHttpResponseHandler() {
+                                @Override
+                                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                                    Snackbar.make(rvTweets, "Deleted", Snackbar.LENGTH_SHORT).show();
+
+                                    mTweets.remove(position);
+                                    notifyItemRemoved(position);
+                                }
+
+                                @Override
+                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                    Log.e("Deleting", errorResponse.toString());
+                                }
+                            });
+                        }
+
+                    }
+
+                    return true;
+                }
+            });
 
         }
 
@@ -369,7 +403,6 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
                 // Tweet
                 showTweetDetailsDialog(tweet);
-
             }
         }
 
