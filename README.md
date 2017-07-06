@@ -37,7 +37,7 @@ The following **bonus** features are implemented:
 * [x] Use Parcelable instead of Serializable using the popular [Parceler library](http://guides.codepath.com/android/Using-Parceler).
 * [x] Replace all icon drawables and other static image assets with [vector drawables](http://guides.codepath.com/android/Drawables#vector-drawables) where appropriate.
 * [ ] User can **click a link within a tweet body** on tweet details view. The click will launch the web browser with relevant page opened.
-* [ ] User can view following / followers list through any profile they view.
+* [x] User can view following / followers list through any profile they view.
 * [x] User can see embedded image media within the tweet detail view
 * [ ] Use the popular ButterKnife annotation library to reduce view boilerplate.
 * [ ] On the Twitter timeline, leverage the [CoordinatorLayout](http://guides.codepath.com/android/Handling-Scrolls-with-CoordinatorLayout#responding-to-scroll-events) to apply scrolling behavior that [hides / shows the toolbar](http://guides.codepath.com/android/Using-the-App-ToolBar#reacting-to-scroll).
@@ -51,6 +51,8 @@ The following **additional** features are implemented:
 * [x] Button statuses are up to date in both the detail view (modal) and timeline regardless of where the button was pressed
 * [x] When replying to a tweet the user's cursor is automatically set after the @username required
 * [x] Favorite count and retweet count are displayed next to buttons and change colors appropriately depending on state
+* [x] Profile pages contain the user's profile banner as well as profile image
+* [x] Created a TabLayout within the profile activity to view a user's tweets, followers, and friends
 
 ## Video Walkthrough
 
