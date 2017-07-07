@@ -5,8 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.codepath.apps.restclienttemplate.SearchTweetsFragment;
-
 /**
  * Created by veviego on 7/7/17.
  */
@@ -16,7 +14,7 @@ public class SearchPagerAdapter extends FragmentPagerAdapter {
     private String[] tabTitle = new String[] {"Tweets", "Users"};
     Context context;
     public SearchTweetsFragment searchTweetsFragment;
-    public MentionsTimelineFragment mentionsTimelineFragment;
+    public SearchUsersFragment searchUsersFragment;
     public String query;
 
     public SearchPagerAdapter(FragmentManager fm, String query, Context context) {
@@ -40,8 +38,8 @@ public class SearchPagerAdapter extends FragmentPagerAdapter {
                 return searchTweetsFragment;
 
             case 1:
-                mentionsTimelineFragment = new MentionsTimelineFragment();
-                return mentionsTimelineFragment;
+                searchUsersFragment = SearchUsersFragment.newInstance(query);
+                return searchUsersFragment;
 
             default:
                 return null;
