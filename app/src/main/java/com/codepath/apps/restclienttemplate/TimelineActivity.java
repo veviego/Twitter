@@ -75,7 +75,7 @@ public class TimelineActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuItem sv = (MenuItem) menu.findItem(R.id.action_search);
+        final MenuItem sv = (MenuItem) menu.findItem(R.id.action_search);
         final SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(sv);
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -83,6 +83,10 @@ public class TimelineActivity extends AppCompatActivity {
                 Intent i = new Intent(TimelineActivity.this, SearchActivity.class);
                 i.putExtra("query", mSearchView.getQuery().toString());
                 startActivity(i);
+
+                // Close searchbar
+                mSearchView.setIconified(true);
+                MenuItemCompat.collapseActionView(sv);
                 return true;
             }
 
@@ -98,6 +102,7 @@ public class TimelineActivity extends AppCompatActivity {
 
         return true;
     }
+
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -159,8 +164,6 @@ public class TimelineActivity extends AppCompatActivity {
         composeAlertDialog.show();
         hideProgressBar();
     }
-
-    // idea, make onsubmit just call a helper which would then do fragment.tweets.add ...
 
 
     public void onSubmit(View v) {

@@ -17,12 +17,23 @@ The following **required** functionality is completed:
   * [x] User can then enter a new tweet and post this to twitter
   * [x] User is taken back to home timeline with **new tweet visible** in timeline
   * [x] Newly created tweet should be manually inserted into the timeline and not rely on a full refresh
+* [x] User can switch between Timeline and Mention views using tabs
+  * [x] User can view their home timeline tweets.
+  * [x] User can view the recent mentions of their username.
+  * [x] User can compose tweets.
+* [x] User can navigate to view their own profile
+  * [x] User can see picture, tagline, # of followers, # of following, and tweets on their profile.
+  * [x] The users/verify_credentials endpoint can be used to access this information.
+* [x] User can click on the profile image in any tweet to see another user's profile.
+  * [x] User can see picture, tagline, # of followers, # of following, and tweets of clicked user.
+  * [x] Profile view should include that user's timeline
 
 The following **optional** features are implemented:
 
 * [x] User can **see a counter with total number of characters left for tweet** on compose tweet page
 * [x] User can **pull down to refresh tweets timeline**
 * [x] User is using **"Twitter branded" colors and styles**
+* [x] User can search for tweets matching a particular query and see results.
 * [x] User sees an **indeterminate progress indicator** when any background or network task is happening
 * [x] User can **select "reply" from detail view to respond to a tweet**
   * [x] User that wrote the original tweet is **automatically "@" replied in compose**
@@ -53,6 +64,8 @@ The following **additional** features are implemented:
 * [x] Favorite count and retweet count are displayed next to buttons and change colors appropriately depending on state
 * [x] Profile pages contain the user's profile banner as well as profile image
 * [x] Created a TabLayout within the profile activity to view a user's tweets, followers, and friends
+* [x] Users can delete their own tweets via the home timeline by longpressing them
+* [x] Users can search for other users
 
 ## Video Walkthrough
 
