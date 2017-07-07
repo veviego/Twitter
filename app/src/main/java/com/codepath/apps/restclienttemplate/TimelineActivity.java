@@ -6,10 +6,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,7 +21,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.codepath.apps.restclienttemplate.fragments.HomeTimelineFragment;
 import com.codepath.apps.restclienttemplate.fragments.TweetsPagerAdapter;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.User;
@@ -30,8 +28,6 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -41,14 +37,9 @@ public class TimelineActivity extends AppCompatActivity {
     private final int NT_REQUEST_CODE = 20;
 
     private TwitterClient client;
-    private TweetAdapter tweetAdapter;
-    private ArrayList<Tweet> tweets;
-    private RecyclerView rvTweets;
-    private SwipeRefreshLayout swipeContainer;
     MenuItem miActionProgressItem;
     EditText message;
     AlertDialog composeAlertDialog;
-    HomeTimelineFragment homeTimelineFragment;
     ViewPager vpPager;
     TweetsPagerAdapter tpAdapter;
 
@@ -84,6 +75,27 @@ public class TimelineActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem sv = (MenuItem) menu.findItem(R.id.action_search);
+        final SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(sv);
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Intent i = new Intent(TimelineActivity.this, SearchActivity.class);
+                i.putExtra("query", mSearchView.getQuery().toString());
+                startActivity(i);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        EditText searchEditText = (EditText) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchEditText.setTextColor(getResources().getColor(R.color.white));
+        searchEditText.setHintTextColor(getResources().getColor(R.color.white));
+
         return true;
     }
 
@@ -217,4 +229,6 @@ public class TimelineActivity extends AppCompatActivity {
     public void onCancel(View view) {
         composeAlertDialog.cancel();
     }
+
+
 }

@@ -85,18 +85,6 @@ public class MyProfile extends AppCompatActivity {
 
 
 
-
-//        UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(userName);
-//
-//        // Display the user timeline fragment inside the container (dynamically)
-//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//
-//        // Make changes
-//        ft.replace(R.id.flContainer, userTimelineFragment);
-//
-//        // Commit
-//        ft.commit();
-
         // Find the toolbar view inside the activity layout
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         // Sets the Toolbar to act as the ActionBar for this Activity window.
