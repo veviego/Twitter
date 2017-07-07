@@ -334,6 +334,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         public ImageView ivMedia;
         public TextView tvFavoriteCount;
         public TextView tvRetweetCount;
+        public RecyclerView rvTweets;
 
         public ViewHolder(final View itemView) {
             super(itemView);
@@ -351,7 +352,10 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             ivMedia = (ImageView) itemView.findViewById(R.id.ivUserMedia);
             tvFavoriteCount = (TextView) itemView.findViewById(R.id.tvFavoriteCount);
             tvRetweetCount = (TextView) itemView.findViewById(R.id.tvRetweetCount);
+            rvTweets = (RecyclerView) itemView.findViewById(R.id.rvTweet);
 
+
+            itemView.setOnClickListener(this);
 
             // Set the long click listener for deleting personal tweets
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -369,7 +373,6 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                             client.deletePost(tweet.uid, new JsonHttpResponseHandler() {
                                 @Override
                                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                                    Snackbar.make(rvTweets, "Deleted", Snackbar.LENGTH_SHORT).show();
 
                                     mTweets.remove(position);
                                     notifyItemRemoved(position);
