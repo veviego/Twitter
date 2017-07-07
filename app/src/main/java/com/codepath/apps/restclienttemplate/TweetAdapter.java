@@ -357,7 +357,6 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    Toast.makeText(context, "hi", Toast.LENGTH_LONG).show();
                     // get item position
                     final int position = getAdapterPosition();
                     // make sure the position is valid, i.e. actually exists in the view
