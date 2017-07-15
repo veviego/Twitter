@@ -10,22 +10,20 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.fragments.TweetsPagerAdapter;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,6 +49,7 @@ public class TimelineActivity extends AppCompatActivity {
 
         client = TwitterApplication.getRestClient();
 
+
         // Get the ViewPager
         vpPager = (ViewPager) findViewById(R.id.viewpager);
         // Set the Pager Adapter
@@ -68,6 +67,7 @@ public class TimelineActivity extends AppCompatActivity {
         // Sets the Toolbar to act as the ActionBar for this Activity window.
         // Make sure the toolbar exists in the activity and is not null
         setSupportActionBar(toolbar);
+
     }
 
     // Menu icons are inflated just as they were with actionbar
@@ -127,42 +127,34 @@ public class TimelineActivity extends AppCompatActivity {
     // Establish event handler for compose icon
     public void onComposeAction (MenuItem mi) {
 
-        // Show the progress bar until the modal loads
-        showProgressBar();
-
-        // Inflate the compose dialog
-        View composeView = LayoutInflater.from(this).inflate(R.layout.activity_compose, null);
-        // Create the Alert Dialog Builder
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        // Set the view that the alert dialog builder should create
-        alertDialogBuilder.setView(composeView);
-        composeAlertDialog = alertDialogBuilder.create();
-
-        // Get EditText for tweet body and set listener
-        message = (EditText) composeView.findViewById(R.id.etMessageBox);
-        final TextView charCount = (TextView) composeView.findViewById(R.id.tvCharCount);
-        message.addTextChangedListener(new TextWatcher() {
+        // Connect to my server
+        client.connectToServer(new JsonHttpResponseHandler() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Toast.makeText(TimelineActivity.this, "Success", Toast.LENGTH_LONG).show();
+                Log.e("help1", response.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Toast.makeText(TimelineActivity.this, "Failure", Toast.LENGTH_LONG).show();
+                Log.e("help1", errorResponse.toString());
 
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Toast.makeText(TimelineActivity.this, "Failure", Toast.LENGTH_LONG).show();
+                Log.e("help2", errorResponse.toString());
 
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                int available = 140 - message.getText().toString().length();
-                String num = available + " / 140";
-                charCount.setText(num);
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Toast.makeText(TimelineActivity.this, "Failure", Toast.LENGTH_LONG).show();
+                Log.e("help3", throwable.toString());
             }
         });
-
-        // Open the dialog and hide the progress bar
-        composeAlertDialog.show();
-        hideProgressBar();
     }
 
 

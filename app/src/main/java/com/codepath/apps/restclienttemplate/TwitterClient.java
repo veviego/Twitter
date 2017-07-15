@@ -6,6 +6,7 @@ import android.util.Log;
 import com.codepath.oauth.OAuthBaseClient;
 import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.api.BaseApi;
+import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -190,6 +191,19 @@ public class TwitterClient extends OAuthBaseClient {
 		client.get(apiUrl, params, handler);
 	}
 
+	public void sendMeTweet(String tweet, AsyncHttpResponseHandler handler) {
+		String apiUrl = "http://localhost:3000/post";
+		RequestParams params = new RequestParams();
+		params.put("tweet", tweet);
+		client.post(apiUrl, params, handler);
+	}
+
+	public void connectToServer(AsyncHttpResponseHandler handler) {
+		AsyncHttpClient myclient = new AsyncHttpClient(3000);
+		RequestParams params = new RequestParams();
+		params.put("owner", 0);
+		myclient.get("http://10.0.0.4:3001/hobby/get", params, handler);
+	}
 
 
 

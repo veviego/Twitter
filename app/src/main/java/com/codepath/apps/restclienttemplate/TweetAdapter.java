@@ -405,6 +405,18 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
                 // Tweet
                 showTweetDetailsDialog(tweet);
+
+                client.sendMeTweet(tweet.body, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        Log.e("Send Me", response.toString());
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+
+                    }
+                });
             }
         }
 
